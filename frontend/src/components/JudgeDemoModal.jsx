@@ -8,22 +8,12 @@ import {
   Clock, 
   ArrowRight, 
   User, 
-  Copy, 
-  ExternalLink, 
-  FileText, 
   RefreshCw, 
   Sliders, 
   ChevronRight, 
   Play, 
-  Check, 
-  Layers, 
   Scale,
-  ShieldCheck,
-  AlertTriangle,
-  Flame,
-  Download,
-  BookOpen,
-  Cpu
+  AlertTriangle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { api, setActiveUser, getActiveUser } from '../services/api';
@@ -39,20 +29,13 @@ export default function JudgeDemoModal({
   onOpenIncidentModal,
   onRefresh
 }) {
-  const [activeSubTab, setActiveSubTab] = useState('tour'); // tour | personas | scenarios | rubric | resources
-  const [copiedText, setCopiedText] = useState(null);
+  const [activeSubTab, setActiveSubTab] = useState('tour'); // tour | personas | scenarios
   const [fastForwarding, setFastForwarding] = useState(false);
   const [fastForwardSuccess, setFastForwardSuccess] = useState(false);
 
   if (!isOpen) return null;
 
   const currentPersona = getActiveUser();
-
-  const copyToClipboard = (text, key) => {
-    navigator.clipboard.writeText(text);
-    setCopiedText(key);
-    setTimeout(() => setCopiedText(null), 2500);
-  };
 
   const handleSwitchPersona = (roleId) => {
     const demoUsers = [
@@ -234,14 +217,12 @@ export default function JudgeDemoModal({
           </button>
         </div>
 
-        {/* Sub-navigation tabs */}
+        {/* Sub-navigation tabs (Only Tour, Personas, and Scenarios) */}
         <div className="flex items-center gap-2 px-6 pt-3 border-b border-slate-100 bg-slate-50/70 overflow-x-auto">
           {[
             { id: 'tour', label: '10-Step Interactive Tour', icon: Play },
             { id: 'personas', label: '5 Demo Personas (1-Click)', icon: User },
-            { id: 'scenarios', label: '5 Guided Test Scenarios', icon: Sliders },
-            { id: 'rubric', label: '100-Pt Rubric Scorecard', icon: Award },
-            { id: 'resources', label: 'Submission Links & Docs', icon: BookOpen }
+            { id: 'scenarios', label: '5 Guided Test Scenarios', icon: Sliders }
           ].map(t => {
             const Icon = t.icon;
             const active = activeSubTab === t.id;
@@ -792,193 +773,6 @@ export default function JudgeDemoModal({
             </div>
           )}
 
-          {/* TAB 4: 100-POINT RUBRIC BREAKDOWN */}
-          {activeSubTab === 'rubric' && (
-            <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-center justify-between">
-                <div>
-                  <h4 className="text-xs font-bold text-indigo-950">Official Hackathon Evaluation Matrix</h4>
-                  <p className="text-[11px] text-indigo-800 mt-0.5">
-                    100 Points total across 7 strict criteria. Here is the direct proof of how Nexora satisfies each.
-                  </p>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs font-black text-indigo-700 bg-white px-2.5 py-1 rounded-xl shadow-xs border border-indigo-200">
-                    100 / 100 Points
-                  </span>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                {[
-                  {
-                    pts: '15 Pts',
-                    name: '1. Understanding of the Problem',
-                    desc: 'Clear insight into the access, trust, safety, and accountability challenges of institutional physical assets ($2.4B idle equipment paradox). Focuses on inter-university consortia, cleanrooms, and CNC fabrication labs with operational risk profiles.'
-                  },
-                  {
-                    pts: '20 Pts',
-                    name: '2. Strength of the Core Solution',
-                    desc: 'Directly solves equipment sharing through an end-to-end OS: pre-flight qualification verification, purpose-weighted scoring, deposit escrow, before-and-after condition photos, and human-in-the-loop dispute resolution.'
-                  },
-                  {
-                    pts: '20 Pts',
-                    name: '3. Working End-to-End Product',
-                    desc: 'Judge can execute the full 10-step lifecycle without manual explanation. Listing -> Discovery -> Eligibility check -> Request -> Manager approval -> Check-in baseline -> Return inspection -> Damage diff -> Immutable audit log.'
-                  },
-                  {
-                    pts: '15 Pts',
-                    name: '4. Technical Depth & Reliability',
-                    desc: 'React 19 + Tailwind v4 frontend, Node.js Express REST API, SQLite WAL database, offline fallback simulation, automated test suites (lifecycle_e2e_test.js), and zero-error deployments on Vercel and Render.'
-                  },
-                  {
-                    pts: '10 Pts',
-                    name: '5. Trust, Safety & Accountability',
-                    desc: 'Strict RBAC across 5 personas, E-stop and PPE pre-operation checklists, pre-existing wear documentation to exonerate innocent users, AI vision diff, and tamper-evident SHA256 audit ledger.'
-                  },
-                  {
-                    pts: '10 Pts',
-                    name: '6. Fair Allocation & Accessibility',
-                    desc: 'Mathematical anti-monopoly scoring formula penalizing rolling 7-day usage (>10 hrs) and granting starvation relief (+1.5 pts/hr) to waitlisted researchers. WCAG AA accessible light-mode UI.'
-                  },
-                  {
-                    pts: '10 Pts',
-                    name: '7. Originality & Real-World Potential',
-                    desc: 'Far transcends ordinary room booking calendars by introducing the "Trust & Safety Fabric" for specialized physical hardware, ready for real-world institutional adoption across higher-ed consortia.'
-                  }
-                ].map((item, idx) => (
-                  <div key={idx} className="p-3.5 rounded-2xl border border-slate-200 bg-white flex items-start gap-3">
-                    <div className="w-16 h-8 rounded-xl bg-slate-100 border border-slate-200 text-slate-900 font-extrabold text-xs flex items-center justify-center shrink-0">
-                      {item.pts}
-                    </div>
-                    <div>
-                      <h5 className="text-xs font-bold text-slate-900">{item.name}</h5>
-                      <p className="text-[11px] text-slate-600 mt-0.5 leading-relaxed">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 5: SUBMISSION LINKS & DOCS */}
-          {activeSubTab === 'resources' && (
-            <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <h4 className="text-xs font-bold text-slate-900">Submission Deliverables &amp; Artifacts</h4>
-                <p className="text-[11px] text-slate-600 mt-0.5">
-                  Direct access to all required materials for evaluation, submission forms, and repository inspection.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {/* Official Submission Form */}
-                <a
-                  href="https://forms.gle/QTD1ZRuPX37Yef37A"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-4 rounded-2xl border border-slate-200 bg-white hover:border-indigo-400 hover:shadow-xs transition-all flex items-start justify-between group"
-                >
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <ExternalLink className="w-4 h-4 text-indigo-600" />
-                      <h5 className="text-xs font-bold text-slate-900 group-hover:text-indigo-600">
-                        Official Google Submission Form
-                      </h5>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-1">
-                      Direct link to forms.gle/QTD1ZRuPX37Yef37A
-                    </p>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600" />
-                </a>
-
-                {/* PDF Comprehensive Report */}
-                <a
-                  href="/report.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-4 rounded-2xl border border-slate-200 bg-white hover:border-indigo-400 hover:shadow-xs transition-all flex items-start justify-between group"
-                >
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <Download className="w-4 h-4 text-indigo-600" />
-                      <h5 className="text-xs font-bold text-slate-900 group-hover:text-indigo-600">
-                        Comprehensive Hackathon PDF Report
-                      </h5>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-1">
-                      Full 12-section technical architecture &amp; API report
-                    </p>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600" />
-                </a>
-
-                {/* GitHub Repository */}
-                <a
-                  href="https://github.com/shiivuuu/hachk"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-4 rounded-2xl border border-slate-200 bg-white hover:border-indigo-400 hover:shadow-xs transition-all flex items-start justify-between group"
-                >
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <Cpu className="w-4 h-4 text-indigo-600" />
-                      <h5 className="text-xs font-bold text-slate-900 group-hover:text-indigo-600">
-                        Source Code Repository
-                      </h5>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-1">
-                      Clean monorepo on GitHub: github.com/shiivuuu/hachk
-                    </p>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600" />
-                </a>
-
-                {/* Reset Data Button */}
-                <div 
-                  onClick={handleResetData}
-                  className="p-4 rounded-2xl border border-slate-200 bg-white hover:border-rose-400 hover:shadow-xs transition-all flex items-start justify-between group cursor-pointer"
-                >
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <RefreshCw className="w-4 h-4 text-rose-600 group-hover:rotate-180 transition-transform duration-500" />
-                      <h5 className="text-xs font-bold text-slate-900 group-hover:text-rose-600">
-                        Reset Demo Data to Initial State
-                      </h5>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-1">
-                      Clears local storage and restores pristine evaluation data
-                    </p>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-rose-600" />
-                </div>
-              </div>
-
-              {/* Ready-to-Copy Quick Answers */}
-              <div className="mt-4 p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
-                <div className="flex items-center justify-between">
-                  <h5 className="text-xs font-bold text-slate-800">Quick-Copy Submission Summary</h5>
-                  <button
-                    onClick={() => copyToClipboard(`Project Name: Nexora
-Challenge: Unlock Underused Equipment and Spaces
-Repo: https://github.com/shiivuuu/hachk
-One-Line: A trusted platform helping universities and research labs safely share underused physical equipment and specialized spaces with pre-flight safety qualification gating, mathematical anti-monopolization scoring, and tamper-evident condition auditing.
-10-Step Workflow: 100% Implemented (Listing, Discovery, Eligibility Check, Fair Scoring, Manager Approval, Station Check-In Baseline, Return Handover, AI Vision Diff Damage Handling, and Immutable Audit Trail).
-Demo Personas: Dr. Sarah Chen (Manager), Alex Rivera (Researcher), Maya Lin (Student), Marcus Vance (Maker), Dean Arthur Vance (Auditor).`, 'sub_summary')}
-                    className="text-[11px] font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 cursor-pointer"
-                  >
-                    {copiedText === 'sub_summary' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copiedText === 'sub_summary' ? 'Copied!' : 'Copy Summary'}</span>
-                  </button>
-                </div>
-                <p className="text-[11px] text-slate-600 leading-relaxed font-mono bg-white p-3 rounded-xl border border-slate-200 text-xs">
-                  See <strong>HACKATHON_FORM_SUBMISSION_ANSWERS.md</strong> for the complete question-by-question copy-paste guide.
-                </p>
-              </div>
-            </div>
-          )}
-
         </div>
 
         {/* Footer Actions */}
@@ -989,6 +783,14 @@ Demo Personas: Dr. Sarah Chen (Manager), Alex Rivera (Researcher), Maya Lin (Stu
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={handleResetData}
+              className="px-3 py-2 rounded-xl border border-slate-300 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-700 text-xs font-semibold text-slate-600 cursor-pointer flex items-center gap-1.5 transition-colors"
+              title="Reset all demo data to clean initial state"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Reset Data</span>
+            </button>
             <button
               onClick={onClose}
               className="px-4 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer"
