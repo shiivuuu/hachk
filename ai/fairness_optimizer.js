@@ -1,5 +1,5 @@
 /**
- * NexusEquip AI Fair Allocation & Utilization Optimizer
+ * Nexora AI Fair Allocation & Utilization Optimizer
  * Analyzes multi-tenant booking patterns, flags monopolization risks,
  * and generates actionable policy recommendations for institutional admins.
  */
@@ -86,7 +86,7 @@ function analyzeAllocationFairness(bookings = [], resources = [], users = []) {
     underusedResources,
     departmentDistribution: departmentUsageMap,
     aiRecommendation: monopolizationAlerts.length > 0
-      ? `NexusEquip Fair Allocation Engine active: ${monopolizationAlerts.length} users throttled via anti-monopoly curve. Capacity re-routed to waiting graduate researchers.`
+      ? `Nexora Fair Allocation Engine active: ${monopolizationAlerts.length} users throttled via anti-monopoly curve. Capacity re-routed to waiting graduate researchers.`
       : `Equitable access maintained across all participating research groups.`
   };
 }

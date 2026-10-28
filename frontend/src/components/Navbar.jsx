@@ -11,7 +11,8 @@ import {
   Coins, 
   FileCheck2,
   UserPlus,
-  Edit3
+  Edit3,
+  Award
 } from 'lucide-react';
 import { api, getActiveUser, setActiveUser } from '../services/api';
 
@@ -21,7 +22,8 @@ export default function Navbar({
   onOpenCreateResource, 
   onOpenCertModal,
   onOpenCreateProfile,
-  onOpenEditProfile
+  onOpenEditProfile,
+  onOpenJudgeHub
 }) {
   const [currentUser, setCurrentUser] = useState(getActiveUser());
   const [allUsers, setAllUsers] = useState([]);
@@ -36,9 +38,6 @@ export default function Navbar({
       const users = await api.getUsers();
       if (users && users.length > 0) {
         setAllUsers(users);
-        const current = getActiveUser();
-        const matched = users.find(u => u.id === current.id) || users[1];
-        setCurrentUser(matched);
       }
     } catch (err) {
       console.error(err);
@@ -54,7 +53,7 @@ export default function Navbar({
 
   const roleBadges = {
     lab_manager: { label: 'Lab Manager', color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
-    researcher: { label: 'Researcher', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+    researcher: { label: 'PhD Researcher', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
     student: { label: 'Student', color: 'bg-sky-50 text-sky-700 border-sky-200' },
     community_member: { label: 'Maker/Community', color: 'bg-amber-50 text-amber-700 border-amber-200' },
     admin: { label: 'Safety Auditor', color: 'bg-rose-50 text-rose-700 border-rose-200' }
@@ -146,7 +145,17 @@ export default function Navbar({
             </button>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Judge Evaluation Hub Button */}
+            <button
+              onClick={onOpenJudgeHub}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-black rounded-xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 hover:from-amber-300 hover:to-amber-200 text-slate-950 shadow-sm border border-amber-400 cursor-pointer transition-all hover:scale-102"
+              title="Open 10-Step Interactive Evaluation Hub"
+            >
+              <Award className="w-3.5 h-3.5 fill-current text-slate-950" />
+              <span>🏆 Judge Hub</span>
+            </button>
+
             <button
               onClick={onOpenCreateResource}
               className="hidden lg:flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all cursor-pointer"

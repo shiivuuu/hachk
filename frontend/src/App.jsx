@@ -13,6 +13,8 @@ import IncidentModal from './components/IncidentModal';
 import ListResourceModal from './components/ListResourceModal';
 import CertModal from './components/CertModal';
 import ProfileModal from './components/ProfileModal';
+import JudgeDemoModal from './components/JudgeDemoModal';
+import DemoTourBanner from './components/DemoTourBanner';
 
 import { getActiveUser } from './services/api';
 
@@ -28,13 +30,13 @@ export default function App() {
   const [showCertModal, setShowCertModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [profileModalMode, setProfileModalMode] = useState('create');
+  const [showJudgeModal, setShowJudgeModal] = useState(false);
 
   const [refreshCount, setRefreshCount] = useState(0);
 
   useEffect(() => {
     const handleUserChanged = (e) => {
-      setCurrentUser(e.detail);
-      setRefreshCount(c => c + 1);
+      setCurrentUser(e.detail || getActiveUser());
     };
     window.addEventListener('user-changed', handleUserChanged);
     return () => window.removeEventListener('user-changed', handleUserChanged);
@@ -45,12 +47,13 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans pb-16 sm:pb-0">
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenCreateResource={() => setShowListResourceModal(true)}
         onOpenCertModal={() => setShowCertModal(true)}
+        onOpenJudgeHub={() => setShowJudgeModal(true)}
         onOpenCreateProfile={() => {
           setProfileModalMode('create');
           setShowProfileModal(true);
@@ -94,6 +97,27 @@ export default function App() {
           <AuditPage refreshCount={refreshCount} />
         )}
       </main>
+
+      {/* Floating Demo Tour Banner for Step-by-Step Guidance */}
+      <DemoTourBanner
+        onOpenJudgeHub={() => setShowJudgeModal(true)}
+        onSelectTab={(tab) => setActiveTab(tab)}
+        onOpenListModal={() => setShowListResourceModal(true)}
+        onRefresh={triggerRefresh}
+      />
+
+      {/* Judge Demo & Evaluation Hub Modal */}
+      <JudgeDemoModal
+        isOpen={showJudgeModal}
+        onClose={() => setShowJudgeModal(false)}
+        onSelectTab={(tab) => setActiveTab(tab)}
+        onOpenBookingModal={(r) => setSelectedResourceForBooking(r)}
+        onOpenListModal={() => setShowListResourceModal(true)}
+        onOpenCheckInModal={(b) => setSelectedBookingForCheckin(b)}
+        onOpenReturnModal={(b) => setSelectedBookingForReturn(b)}
+        onOpenIncidentModal={(inc) => setSelectedIncidentForResolve(inc)}
+        onRefresh={triggerRefresh}
+      />
 
       {selectedResourceForBooking && (
         <BookingModal
@@ -173,6 +197,13 @@ export default function App() {
             </p>
           </div>
           <div className="flex items-center gap-4 text-[11px] text-slate-500 font-medium">
+            <button
+              onClick={() => setShowJudgeModal(true)}
+              className="text-amber-700 font-bold hover:underline cursor-pointer flex items-center gap-1"
+            >
+              <span>🏆 Open Judge Hub</span>
+            </button>
+            <span>•</span>
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
               Multi-Institutional Trust Fabric Active

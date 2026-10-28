@@ -1,5 +1,5 @@
 /**
- * NexusEquip AI Condition & Damage Vision Analyzer
+ * Nexora AI Condition & Damage Vision Analyzer
  * Compares pre-booking check-in records against post-use return records.
  * Identifies wear & tear vs negligence, calculates damage severity,
  * and drafts structured incident reports for human safety officers.

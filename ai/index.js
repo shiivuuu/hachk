@@ -1,5 +1,5 @@
 /**
- * NexusEquip AI Suite Entry Point
+ * Nexora AI Suite Entry Point
  */
 
 const { matchResources, KEYWORD_TAXONOMY } = require('./matcher');
