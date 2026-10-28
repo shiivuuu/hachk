@@ -1,0 +1,166 @@
+# ⚡ NexusEquip: Institutional Resource & Equipment Sharing Platform
+
+> **Hackathon Challenge:** Unlock Underused Equipment and Spaces  
+> **Repository:** [https://github.com/shiivuuu/hachk](https://github.com/shiivuuu/hachk)  
+> **Deployment Architecture:** Frontend on **Vercel** • Backend on **Render** • Multi-Tenant Trust Fabric
+
+[![Vercel Deployment](https://img.shields.io/badge/Frontend-Vercel-black?logo=vercel&style=for-the-badge)](https://vercel.com)
+[![Render Deployment](https://img.shields.io/badge/Backend-Render-46E3B7?logo=render&style=for-the-badge)](https://render.com)
+[![Architecture: 10--Step Lifecycle](https://img.shields.io/badge/10--Step_Lifecycle-100%25_Verified-6366f1?style=for-the-badge)](./docs/HACKATHON_SUBMISSION.md)
+[![AI Suite](https://img.shields.io/badge/AI_Engine-NLP%20%7C%20Vision%20Diff%20%7C%20Fairness-06b6d4?style=for-the-badge)](./ai)
+
+---
+
+## 🌟 Executive Summary
+Colleges, universities, makerspaces, and regional innovation hubs own millions of dollars in advanced technical resources—such as **4-axis CNC milling centers, confocal laser microscopes, ISO Class 5 cleanroom lithography bays, and high-speed optics cameras**—that remain idle 60% to 75% of the time.
+
+At the same time, students, researchers, and early-stage startup creators struggle to access these resources because private rental rates ($300–$800/hr) or direct purchases ($100k–$1M+) are prohibitive.
+
+Ordinary room booking systems fail because they treat specialized technical equipment like standard desks: **they ignore operator safety credentials, baseline condition tracking, dispute liability, and fair quota allocation**.
+
+**NexusEquip** solves this with an end-to-end trusted resource-sharing OS featuring:
+1. **Pre-Flight Safety Qualification Checking** (verifying laser, biohazard, and machining certifications).
+2. **Transparent Fair Allocation & Anti-Monopolization Scoring** (mathematically preventing dominant groups from hoarding equipment).
+3. **Step 7 & 8 Station Condition Handover Studios** (documenting pre-existing wear to protect users, followed by AI Computer Vision discrepancy analysis).
+4. **Human-in-the-Loop Incident Governance** (with automated damage estimation and deposit adjudication).
+5. **Tamper-Evident Immutable Audit Ledger** (every action logged with actor roles, timestamps, and cryptographic proofs).
+
+---
+
+## 🏗️ Clean Monorepo Architecture
+
+The repository is cleanly partitioned into dedicated modules:
+
+```
+hachk/
+├── frontend/               # React 19 + Vite 8 + Tailwind CSS v4 UI (Vercel Ready)
+│   ├── src/
+│   │   ├── components/     # Steppers, Modals (Steps 1-10), Persona Switcher
+│   │   ├── pages/          # Catalog, Bookings, Manager Dashboard, AI Studio, Audit
+│   │   └── services/api.js # Centralized API client with offline fallback simulation
+│   ├── vercel.json         # Vercel SPA routing configuration
+│   └── vite.config.js
+├── backend/                # Node.js Express REST API (Render Ready)
+│   ├── src/
+│   │   ├── db/             # SQLite WAL schema & automated database seeder
+│   │   ├── routes/         # auth, resources, bookings, incidents, certs, audit, ai
+│   │   ├── services/       # FairAllocationService, AuditService
+│   │   └── server.js       # Production server entrypoint
+│   ├── tests/              # End-to-end 10-step lifecycle test suites
+│   └── render.yaml         # Render blueprint configuration
+├── ai/                     # Standalone AI Safety & Fairness Suite
+│   ├── matcher.js          # Natural Language capability search & taxonomy engine
+│   ├── cert_verifier.js    # Document credential OCR and expiration auditor
+│   ├── condition_analyzer.js # Pre/Post condition vision diff & damage evaluator
+│   ├── fairness_optimizer.js # Multi-tenant Gini fair allocation optimizer
+│   └── tests/ai_test.js    # AI test suite
+├── uiux/                   # Design Assets & Specs
+│   ├── design-tokens.json  # Complete color, typography, spacing tokens
+│   ├── DESIGN_SYSTEM.md    # Design principles & WCAG accessibility standards
+│   ├── USER_JOURNEYS.md    # Mermaid sequence diagrams & user persona workflows
+│   ├── WIREFRAMES.md       # ASCII wireframes for all 5 screens and 5 studios
+│   └── ARCHITECTURE.svg    # System data-flow architecture diagram
+├── docs/                   # Submission Documentation
+│   ├── HACKATHON_SUBMISSION.md   # Official 12-section submission document
+│   ├── JUDGE_TESTING_GUIDE.md    # 3-minute evaluator walkthrough & demo accounts
+│   ├── DEPLOYMENT_GUIDE.md       # Step-by-step Vercel & Render deployment guide
+│   └── API_DOCUMENTATION.md      # Full REST API endpoints specification
+├── render.yaml             # Root Render blueprint specification
+├── vercel.json             # Root Vercel edge deployment configuration
+└── README.md               # Main project presentation
+```
+
+---
+
+## 🎯 100% 10-Step Hackathon Workflow Checklist
+
+| Step | Lifecycle Stage | NexusEquip Implementation | Verified |
+|---|---|---|:---:|
+| **01** | **Owner Lists Resource** | Multi-attribute listing: specs, hourly rates, security deposits, safety prerequisites, staff supervision flags | ✅ |
+| **02** | **Discovery & Eligibility** | Natural Language AI matcher + real-time pre-flight certification eligibility check | ✅ |
+| **03** | **Request Submitted** | Purpose-weighted access request (Thesis / Capstone / Coursework / Commercial) | ✅ |
+| **04** | **Prerequisites & Fair Score** | System verifies certificates, detects conflicts, applies anti-monopoly usage penalties | ✅ |
+| **05** | **Manager Oversight** | Human review queue showing applicant trust score, project abstract, and safety risk notes | ✅ |
+| **06** | **Decision & Waitlist** | 1-Click approval (issuing digital pass) or decline with explainable reason; transparent queue ordering | ✅ |
+| **07** | **Check-In & Baseline** | Station checklist (E-stop, PPE), baseline photo upload, documented pre-existing scratches | ✅ |
+| **08** | **Return & Handover** | Post-use condition notes, cleanliness rating (1-5), consumables tracking | ✅ |
+| **09** | **Incident & Damage Handling** | AI Vision Diff compares Step 7 vs Step 8, flags damage, holds deposit, and facilitates dispute resolution | ✅ |
+| **10** | **Complete Audit History** | Append-only chronological ledger with actor roles, timestamps, diff payloads, and exportable JSON | ✅ |
+
+---
+
+## 👥 Pre-Configured Demo Personas (1-Click Switcher)
+
+Click the **Persona Switcher** in the top-right corner of the web app to switch between personas instantly:
+
+| Persona | Role | Institution | Trust | Qualifications |
+|---|---|---|---|---|
+| **Dr. Sarah Chen** | Lab Manager & Safety Officer | MIT Center for Bits and Atoms | 98% | Full Approval Authority & Safety Governance |
+| **Alex Rivera** | PhD Robotics Researcher | Stanford Bio-X & Robotics | 94% | 5-Axis CNC Mill Certified, Laser Safety L2 |
+| **Maya Lin** | Undergraduate Student | Carnegie Mellon Innovation Institute | 88% | Basic Safety (Triggers Step 2 missing cert check) |
+| **Marcus Vance** | Community Innovator | Downtown Community MakerSpace | 82% | 3D Additive Sintering Certified |
+| **Dean Arthur Vance** | Consortium Safety Auditor | Research Oversight Board | 100% | Compliance Oversight & Audit Ledger Inspector |
+
+---
+
+## 🚀 Quickstart: Run Locally in 2 Minutes
+
+### 1. Start the Backend API
+```bash
+cd backend
+npm install
+npm run seed      # Seeds database with 5 users, 8 resources, and realistic bookings
+npm start         # Runs API on http://localhost:5000
+```
+
+### 2. Start the Frontend
+```bash
+cd frontend
+npm install
+npm run dev       # Runs Vite on http://localhost:5173
+```
+
+Open `http://localhost:5173` in your browser.
+
+### 3. Run Automated 10-Step Verification Tests
+```bash
+# Test the AI suite:
+node ai/tests/ai_test.js
+
+# Test the complete 10-step lifecycle against live API:
+node backend/tests/lifecycle_e2e_test.js
+
+# Test Step 9 damage detection & incident handling:
+node backend/tests/incident_damage_test.js
+```
+
+---
+
+## 🚢 Zero-Error Cloud Deployment: Vercel & Render
+
+### Deploy Frontend on Vercel:
+1. Connect `https://github.com/shiivuuu/hachk` to **Vercel**.
+2. Framework: **Vite** • Root Directory: **`frontend`** (or root using included `vercel.json`).
+3. Set Environment Variable:
+   - `VITE_API_URL` = `https://<your-render-url>/api`
+4. Click **Deploy**. Complete in ~20 seconds.
+
+### Deploy Backend on Render:
+1. In **Render Dashboard**, select **New + Blueprint**.
+2. Connect `https://github.com/shiivuuu/hachk`.
+3. Render reads `render.yaml`, builds the Node.js service, runs database migrations automatically via `postinstall`, and launches the API.
+4. CORS is pre-configured with `origin: '*'` so the Vercel frontend connects seamlessly without network errors.
+
+---
+
+## 📚 Complete Documentation Links
+- [Hackathon Project Submission Document](./docs/HACKATHON_SUBMISSION.md)
+- [Judge Testing & Step-by-Step Walkthrough Guide](./docs/JUDGE_TESTING_GUIDE.md)
+- [Cloud Deployment Guide (Vercel & Render)](./docs/DEPLOYMENT_GUIDE.md)
+- [REST API Endpoint Documentation](./docs/API_DOCUMENTATION.md)
+- [UI/UX Design System & Tokens](./uiux/DESIGN_SYSTEM.md)
+- [System Architecture Diagram (SVG)](./uiux/ARCHITECTURE.svg)
+
+---
+
+*NexusEquip — Built with pride for the 2026 Unlock Underused Equipment and Spaces Hackathon.*

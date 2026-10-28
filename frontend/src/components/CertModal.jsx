@@ -1,0 +1,237 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  X, 
+  FileCheck2, 
+  Sparkles, 
+  ShieldCheck, 
+  UploadCloud, 
+  Calendar, 
+  AlertCircle, 
+  CheckCircle2, 
+  Clock,
+  Award
+} from 'lucide-react';
+import { api, getActiveUser } from '../services/api';
+import confetti from 'canvas-confetti';
+
+export default function CertModal({ onClose }) {
+  const currentUser = getActiveUser();
+  const [certs, setCerts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showUploadForm, setShowUploadForm] = useState(false);
+
+  // Upload Form
+  const [title, setTitle] = useState('5-Axis CNC Mill Certified Operator');
+  const [issuingBody, setIssuingBody] = useState('MIT Environment, Health & Safety (EHS)');
+  const [issueDate, setIssueDate] = useState('2025-06-15');
+  const [expiryDate, setExpiryDate] = useState('2027-06-15');
+  const [aiResult, setAiResult] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    loadUserCerts();
+  }, [currentUser]);
+
+  const loadUserCerts = async () => {
+    try {
+      const data = await api.getCertifications(currentUser.id);
+      setCerts(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleUploadCert = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMsg(null);
+
+    try {
+      const payload = {
+        title,
+        issuing_body: issuingBody,
+        issue_date: issueDate,
+        expiry_date: expiryDate,
+        document_url: 'https://example.com/certs/verified-doc.pdf',
+        raw_text_extract: `Certificate of Safety Competency issued to ${currentUser.name} for ${title} under authorized supervision.`
+      };
+
+      const res = await api.uploadCertification(payload);
+      setAiResult(res.aiVerification);
+      confetti({ particleCount: 50, spread: 50 });
+      loadUserCerts();
+      setTimeout(() => {
+        setShowUploadForm(false);
+        setAiResult(null);
+      }, 3000);
+    } catch (err) {
+      setErrorMsg(err.message || 'Failed to submit certification');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
+      <div className="relative w-full max-w-xl rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95">
+        
+        {/* Header */}
+        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400">
+              Institutional Credential Passport
+            </span>
+            <h2 className="text-lg font-bold text-white mt-0.5">
+              {currentUser.name}’s Safety Certifications
+            </h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-4">
+          
+          {/* Active Certifications List */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-300">
+                Verified Credentials ({certs.length})
+              </span>
+              <button
+                onClick={() => setShowUploadForm(!showUploadForm)}
+                className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1"
+              >
+                <UploadCloud className="w-3.5 h-3.5" />
+                <span>{showUploadForm ? 'Cancel' : '+ Add Safety Certificate'}</span>
+              </button>
+            </div>
+
+            {certs.length === 0 ? (
+              <div className="p-6 text-center rounded-xl bg-slate-950/40 border border-slate-800">
+                <FileCheck2 className="w-8 h-8 text-slate-600 mx-auto mb-2" />
+                <p className="text-xs text-slate-400">No verified certifications found for this user.</p>
+                <p className="text-[11px] text-slate-500 mt-0.5">Upload training documentation below to unlock specialized facilities.</p>
+              </div>
+            ) : (
+              <div className="space-y-2 max-h-56 overflow-y-auto">
+                {certs.map((c) => (
+                  <div
+                    key={c.id}
+                    className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center justify-between gap-3"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                        <Award className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-white">{c.title}</h4>
+                        <p className="text-[10px] text-slate-400">{c.issuing_body} • Expires {c.expiry_date}</p>
+                      </div>
+                    </div>
+                    <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border shrink-0 ${
+                      c.status === 'verified'
+                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                        : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                    }`}>
+                      {c.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Upload Form */}
+          {showUploadForm && (
+            <form onSubmit={handleUploadCert} className="pt-3 border-t border-slate-800 space-y-3 animate-in fade-in">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-400">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>AI Automated Document Verification Scanner</span>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  Certification Title
+                </label>
+                <select
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-indigo-500"
+                >
+                  <option value="5-Axis CNC Mill Certified Operator">5-Axis CNC Mill Certified Operator</option>
+                  <option value="Class 3B/4 Laser Safety Operator">Class 3B/4 Laser Safety Operator</option>
+                  <option value="MakerSpace Basic Safety Orientation">MakerSpace Basic Safety Orientation</option>
+                  <option value="Nanoscale Imaging Safety">Nanoscale Imaging Safety</option>
+                  <option value="Cleanroom Class 1000 Orientation">Cleanroom Class 1000 Orientation</option>
+                  <option value="3D Additive Sintering Operator">3D Additive Sintering Operator</option>
+                  <option value="BioSafety Level 2 Biohazard Containment">BioSafety Level 2 Biohazard Containment</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                    Issuing Authority
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={issuingBody}
+                    onChange={(e) => setIssuingBody(e.target.value)}
+                    className="w-full px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                    Expiration Date
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={expiryDate}
+                    onChange={(e) => setExpiryDate(e.target.value)}
+                    className="w-full px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+              </div>
+
+              {aiResult && (
+                <div className="p-3 rounded-xl bg-indigo-950/40 border border-indigo-900/50 text-xs space-y-1">
+                  <p className="font-bold text-white flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>AI Result: {aiResult.recommendation} ({aiResult.confidenceScore}% Confidence)</span>
+                  </p>
+                  <p className="text-slate-300 text-[11px]">{aiResult.aiAnalysisNote}</p>
+                </div>
+              )}
+
+              {errorMsg && (
+                <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs">
+                  {errorMsg}
+                </div>
+              )}
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-md"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>{loading ? 'Scanning Document...' : 'Run AI Verification & Save'}</span>
+                </button>
+              </div>
+
+            </form>
+          )}
+
+        </div>
+
+      </div>
+    </div>
+  );
+}
