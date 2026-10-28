@@ -1,57 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Calendar, 
-  Clock, 
   MapPin, 
-  CheckCircle2, 
-  AlertCircle, 
   LogIn, 
   LogOut, 
-  AlertOctagon, 
-  ScrollText, 
-  Sparkles, 
-  ShieldCheck, 
-  ChevronRight,
-  Filter,
-  Coins,
-  QrCode
+  AlertOctagon
 } from 'lucide-react';
 import { api, getActiveUser } from '../services/api';
 
-export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncidentView }) {
+export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncidentView, refreshCount = 0 }) {
   const currentUser = getActiveUser();
   const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedBooking, setSelectedBooking] = useState(null);
 
   useEffect(() => {
     loadBookings();
-  }, [currentUser, filterStatus]);
+  }, [currentUser, filterStatus, refreshCount]);
 
   const loadBookings = async () => {
     try {
-      setLoading(true);
       const filters = {};
       if (filterStatus !== 'all') filters.status = filterStatus;
       const data = await api.getBookings(filters);
       setBookings(data);
     } catch (err) {
       console.error(err);
-    } finally {
-      setLoading(false);
     }
   };
 
   const statusConfig = {
-    pending_approval: { label: 'Pending Manager Review', color: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
-    approved: { label: 'Approved (Ready for Step 7 Check-In)', color: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20' },
-    waitlisted: { label: 'Transparent Waitlist', color: 'bg-purple-500/10 text-purple-400 border-purple-500/20' },
-    checked_in: { label: 'Checked In (Step 7 Active)', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
-    returned_pending_inspection: { label: 'Returned (Inspecting)', color: 'bg-teal-500/10 text-teal-400 border-teal-500/20' },
-    completed: { label: 'Completed & Audited (Step 10)', color: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' },
-    incident_reported: { label: 'Incident Review (Step 9)', color: 'bg-rose-500/10 text-rose-400 border-rose-500/20' },
-    rejected: { label: 'Declined', color: 'bg-slate-800 text-slate-400 border-slate-700' }
+    pending_approval: { label: 'Pending Manager Review', color: 'bg-amber-50 text-amber-800 border-amber-200' },
+    approved: { label: 'Approved (Ready for Step 7 Check-In)', color: 'bg-sky-50 text-sky-800 border-sky-200' },
+    waitlisted: { label: 'Transparent Waitlist', color: 'bg-purple-50 text-purple-800 border-purple-200' },
+    checked_in: { label: 'Checked In (Step 7 Active)', color: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
+    returned_pending_inspection: { label: 'Returned (Inspecting)', color: 'bg-teal-50 text-teal-800 border-teal-200' },
+    completed: { label: 'Completed & Audited (Step 10)', color: 'bg-indigo-50 text-indigo-800 border-indigo-200' },
+    incident_reported: { label: 'Incident Review (Step 9)', color: 'bg-rose-50 text-rose-800 border-rose-200' },
+    rejected: { label: 'Declined', color: 'bg-slate-100 text-slate-700 border-slate-200' }
   };
 
   return (
@@ -60,13 +47,13 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
       {/* Page Title & Stats */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs uppercase font-bold tracking-wider text-indigo-400">
-            Lifecycle Tracking & Auditable Records
+          <span className="text-xs uppercase font-extrabold tracking-wider text-indigo-700">
+            Lifecycle Tracking &amp; Auditable Records
           </span>
-          <h1 className="text-2xl font-extrabold text-white mt-0.5">
-            Resource Bookings & Station Passes
+          <h1 className="text-2xl font-extrabold text-slate-900 mt-0.5">
+            Resource Bookings &amp; Station Passes
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Active reservations, initial condition check-ins, return handovers, and security deposit releases.
           </p>
         </div>
@@ -83,10 +70,10 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
             <button
               key={f.id}
               onClick={() => setFilterStatus(f.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border cursor-pointer ${
                 filterStatus === f.id
-                  ? 'border-indigo-500 bg-indigo-600/20 text-white'
-                  : 'border-slate-800 bg-slate-900 text-slate-400 hover:text-white'
+                  ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
+                  : 'border-slate-200 bg-white text-slate-600 hover:text-slate-900'
               }`}
             >
               {f.label}
@@ -96,59 +83,53 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
       </div>
 
       {/* Bookings List */}
-      {loading ? (
-        <div className="p-16 text-center">
-          <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-          <p className="text-xs text-slate-400">Loading booking records...</p>
-        </div>
-      ) : bookings.length === 0 ? (
-        <div className="p-16 text-center rounded-2xl border border-slate-800 bg-slate-900/40">
-          <Calendar className="w-10 h-10 text-slate-600 mx-auto mb-3" />
-          <h3 className="text-sm font-bold text-white">No bookings match this filter</h3>
-          <p className="text-xs text-slate-400 mt-1">
+      {bookings.length === 0 ? (
+        <div className="p-16 text-center rounded-2xl border border-slate-200 bg-white shadow-xs">
+          <Calendar className="w-10 h-10 text-slate-400 mx-auto mb-3" />
+          <h3 className="text-sm font-bold text-slate-800">No bookings match this filter</h3>
+          <p className="text-xs text-slate-500 mt-1">
             Request equipment in the Catalog to experience the 10-step lifecycle.
           </p>
         </div>
       ) : (
         <div className="space-y-4">
           {bookings.map((b) => {
-            const conf = statusConfig[b.status] || { label: b.status, color: 'bg-slate-800 text-slate-300' };
-            const isUserOwner = b.user_id === currentUser.id;
+            const conf = statusConfig[b.status] || { label: b.status, color: 'bg-slate-100 text-slate-700' };
 
             return (
               <div
                 key={b.id}
-                className="rounded-2xl border border-slate-800 bg-slate-900/80 hover:border-slate-700 transition-all p-5 shadow-lg space-y-4"
+                className="rounded-2xl border border-slate-200 bg-white hover:border-slate-300 transition-all p-5 shadow-xs space-y-4"
               >
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                   
                   {/* Left: Resource & Purpose */}
                   <div className="space-y-1.5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-mono text-xs font-bold text-cyan-400 px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/40">
+                      <span className="font-mono text-xs font-bold text-indigo-700 px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200">
                         {b.booking_code}
                       </span>
                       <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${conf.color}`}>
                         {conf.label}
                       </span>
                       {b.waitlist_position && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200">
                           Queue Position #{b.waitlist_position}
                         </span>
                       )}
                     </div>
 
-                    <h3 className="text-base font-extrabold text-white">
+                    <h3 className="text-base font-extrabold text-slate-900">
                       {b.resource_title}
                     </h3>
 
-                    <p className="text-xs text-slate-300">
+                    <p className="text-xs text-slate-700 font-medium">
                       <strong>Project:</strong> {b.project_title}
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 font-medium">
                       <span className="flex items-center gap-1">
-                        <Calendar className="w-3.5 h-3.5 text-indigo-400" />
+                        <Calendar className="w-3.5 h-3.5 text-indigo-600" />
                         <span>{new Date(b.start_time).toLocaleString()}</span>
                       </span>
                       <span>•</span>
@@ -157,7 +138,7 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
                         <span>{b.resource_location || 'Campus Shared Core'}</span>
                       </span>
                       <span>•</span>
-                      <span className="text-slate-300">
+                      <span className="text-slate-700">
                         Applicant: <strong>{b.user_name}</strong>
                       </span>
                     </div>
@@ -170,7 +151,7 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
                     {b.status === 'approved' && (
                       <button
                         onClick={() => onOpenCheckIn(b)}
-                        className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-amber-600/20 transition-all"
+                        className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
                       >
                         <LogIn className="w-4 h-4" />
                         <span>Check In (Step 7)</span>
@@ -181,10 +162,10 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
                     {b.status === 'checked_in' && (
                       <button
                         onClick={() => onOpenReturn(b)}
-                        className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-teal-600/20 transition-all"
+                        className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
                       >
                         <LogOut className="w-4 h-4" />
-                        <span>Return & Inspection (Step 8)</span>
+                        <span>Return &amp; Inspection (Step 8)</span>
                       </button>
                     )}
 
@@ -192,7 +173,7 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
                     {b.status === 'incident_reported' && (
                       <button
                         onClick={() => onOpenIncidentView && onOpenIncidentView(b)}
-                        className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-rose-600/20 transition-all"
+                        className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
                       >
                         <AlertOctagon className="w-4 h-4" />
                         <span>Review AI Incident (Step 9)</span>
@@ -201,7 +182,7 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
 
                     <button
                       onClick={() => setSelectedBooking(selectedBooking?.id === b.id ? null : b)}
-                      className="px-3 py-2 rounded-xl border border-slate-800 bg-slate-950 text-slate-300 hover:text-white text-xs font-semibold"
+                      className="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 text-xs font-semibold cursor-pointer"
                     >
                       {selectedBooking?.id === b.id ? 'Hide Details' : 'View Audit & Pass'}
                     </button>
@@ -212,48 +193,48 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
 
                 {/* Collapsible Inspection & Audit Details Drawer */}
                 {selectedBooking?.id === b.id && (
-                  <div className="pt-4 border-t border-slate-800 space-y-3 animate-in fade-in">
+                  <div className="pt-4 border-t border-slate-100 space-y-3 animate-in fade-in">
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       
                       {/* Step 4 Fairness Breakdown */}
-                      <div className="p-3 rounded-xl bg-slate-950 border border-slate-850 text-xs space-y-1.5">
-                        <span className="text-[10px] uppercase font-bold text-indigo-400 block">
+                      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
+                        <span className="text-[10px] uppercase font-bold text-indigo-700 block">
                           Step 4 Fairness Allocation
                         </span>
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-400">Priority Score:</span>
-                          <span className="font-bold text-emerald-400">{b.fairness_priority_score} / 100</span>
+                          <span className="text-slate-500">Priority Score:</span>
+                          <span className="font-bold text-emerald-700">{b.fairness_priority_score} / 100</span>
                         </div>
-                        <p className="text-[11px] text-slate-400 leading-tight">
+                        <p className="text-[11px] text-slate-600 leading-tight">
                           {b.fairness_breakdown?.explanation || "Purpose priority and institutional trust verified."}
                         </p>
                       </div>
 
                       {/* Step 7 Check-in Record */}
-                      <div className="p-3 rounded-xl bg-slate-950 border border-slate-850 text-xs space-y-1.5">
-                        <span className="text-[10px] uppercase font-bold text-amber-400 block">
+                      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
+                        <span className="text-[10px] uppercase font-bold text-amber-700 block">
                           Step 7 Baseline Condition
                         </span>
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-400">Baseline Status:</span>
-                          <span className="font-semibold text-white uppercase">{b.initial_condition_status || 'Not checked in yet'}</span>
+                          <span className="text-slate-500">Baseline Status:</span>
+                          <span className="font-semibold text-slate-900 uppercase">{b.initial_condition_status || 'Not checked in yet'}</span>
                         </div>
-                        <p className="text-[11px] text-slate-400">
+                        <p className="text-[11px] text-slate-600">
                           {b.checked_in_at ? `Checked in: ${new Date(b.checked_in_at).toLocaleTimeString()}` : 'Awaiting physical station check-in.'}
                         </p>
                       </div>
 
                       {/* Step 8 Return Record */}
-                      <div className="p-3 rounded-xl bg-slate-950 border border-slate-850 text-xs space-y-1.5">
-                        <span className="text-[10px] uppercase font-bold text-teal-400 block">
+                      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
+                        <span className="text-[10px] uppercase font-bold text-teal-700 block">
                           Step 8 Handover Condition
                         </span>
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-400">Final Handover:</span>
-                          <span className="font-semibold text-white uppercase">{b.final_condition_status || 'In progress'}</span>
+                          <span className="text-slate-500">Final Handover:</span>
+                          <span className="font-semibold text-slate-900 uppercase">{b.final_condition_status || 'In progress'}</span>
                         </div>
-                        <p className="text-[11px] text-slate-400">
+                        <p className="text-[11px] text-slate-600">
                           {b.returned_at ? `Returned: ${new Date(b.returned_at).toLocaleTimeString()}` : 'Awaiting station checkout.'}
                         </p>
                       </div>
@@ -261,14 +242,14 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
                     </div>
 
                     {b.approval_notes && (
-                      <div className="p-3 rounded-xl bg-indigo-950/30 border border-indigo-900/40 text-xs text-slate-300">
-                        <strong className="text-indigo-400">Lab Manager Instructions:</strong> {b.approval_notes}
+                      <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-xs text-indigo-900">
+                        <strong className="text-indigo-800">Lab Manager Instructions:</strong> {b.approval_notes}
                       </div>
                     )}
 
                     {b.rejection_reason && (
-                      <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-900/40 text-xs text-rose-300">
-                        <strong className="text-rose-400">Decline Explanation:</strong> {b.rejection_reason}
+                      <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-900">
+                        <strong className="text-rose-800">Decline Explanation:</strong> {b.rejection_reason}
                       </div>
                     )}
 

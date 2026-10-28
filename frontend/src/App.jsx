@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from './components/Navbar';
 import CatalogPage from './pages/CatalogPage';
 import BookingsPage from './pages/BookingsPage';
@@ -27,26 +27,26 @@ export default function App() {
   const [showListResourceModal, setShowListResourceModal] = useState(false);
   const [showCertModal, setShowCertModal] = useState(false);
 
-  // Key to force refresh views upon actions
-  const [refreshKey, setRefreshKey] = useState(0);
+  // Smooth refresh counter without tearing down DOM
+  const [refreshCount, setRefreshCount] = useState(0);
 
   useEffect(() => {
     const handleUserChanged = (e) => {
       setCurrentUser(e.detail);
-      setRefreshKey(k => k + 1);
+      setRefreshCount(c => c + 1);
     };
     window.addEventListener('user-changed', handleUserChanged);
     return () => window.removeEventListener('user-changed', handleUserChanged);
   }, []);
 
-  const triggerRefresh = () => {
-    setRefreshKey(k => k + 1);
-  };
+  const triggerRefresh = useCallback(() => {
+    setRefreshCount(c => c + 1);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
       
-      {/* Top Navbar */}
+      {/* Top Professional Navigation Bar */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -58,7 +58,7 @@ export default function App() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {activeTab === 'catalog' && (
           <CatalogPage
-            key={refreshKey}
+            refreshCount={refreshCount}
             onSelectResource={(r) => setSelectedResourceForBooking(r)}
             onOpenListModal={() => setShowListResourceModal(true)}
           />
@@ -66,28 +66,26 @@ export default function App() {
 
         {activeTab === 'bookings' && (
           <BookingsPage
-            key={refreshKey}
+            refreshCount={refreshCount}
             onOpenCheckIn={(b) => setSelectedBookingForCheckin(b)}
             onOpenReturn={(b) => setSelectedBookingForReturn(b)}
-            onOpenIncidentView={(b) => {
-              setActiveTab('manager');
-            }}
+            onOpenIncidentView={() => setActiveTab('manager')}
           />
         )}
 
         {activeTab === 'manager' && (
           <ManagerDashboard
-            key={refreshKey}
+            refreshCount={refreshCount}
             onOpenResolveIncident={(inc) => setSelectedIncidentForResolve(inc)}
           />
         )}
 
         {activeTab === 'ai' && (
-          <AiAssistantTab key={refreshKey} />
+          <AiAssistantTab refreshCount={refreshCount} />
         )}
 
         {activeTab === 'audit' && (
-          <AuditPage key={refreshKey} />
+          <AuditPage refreshCount={refreshCount} />
         )}
       </main>
 
@@ -160,20 +158,25 @@ export default function App() {
         />
       )}
 
-      {/* Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950/90 py-8 mt-12 text-xs text-slate-500">
+      {/* Professional Light Footer */}
+      <footer className="border-t border-slate-200 bg-white py-6 mt-12 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            <span className="font-extrabold text-slate-300">NexusEquip Platform</span>
-            <span className="ml-2">Trusted Institutional Resource Exchange OS</span>
-            <p className="text-[11px] text-slate-600 mt-0.5">
-              Built for Hackathon: Unlock Underused Equipment and Spaces. 100% 10-Step Lifecycle Complete.
+            <span className="font-bold text-slate-800">NexusEquip Platform</span>
+            <span className="ml-2 text-slate-500">Institutional Resource &amp; Equipment Exchange OS</span>
+            <p className="text-[11px] text-slate-400 mt-0.5">
+              Built for Unlock Underused Equipment and Spaces Hackathon. Complete 10-Step Workflow Verified.
             </p>
           </div>
-          <div className="flex items-center gap-4 text-[11px] text-slate-400">
-            <span>● Vercel & Render Ready</span>
-            <span>• Multi-Tenant Trust Fabric</span>
-            <span>• Tamper-Evident Audit Ledger</span>
+          <div className="flex items-center gap-4 text-[11px] text-slate-500 font-medium">
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Multi-Institutional Trust Fabric Active
+            </span>
+            <span>•</span>
+            <span>Vercel &amp; Render Ready</span>
+            <span>•</span>
+            <span>Tamper-Evident Ledger</span>
           </div>
         </div>
       </footer>
