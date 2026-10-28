@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
+const fs = require('fs');
 
 // Import routes
 const authRoutes = require('./routes/auth.routes');
@@ -14,7 +16,6 @@ const db = require('./db/database');
 
 const app = express();
 
-// Enable CORS for all origins (supports Vercel frontend seamlessly)
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -25,7 +26,19 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(morgan('dev'));
 
-// Health check endpoint (for Render and uptime monitors)
+// Direct PDF download & view route
+app.get('/report.pdf', (req, res) => {
+  const pdfPath = path.join(__dirname, '../../NexusEquip_Hackathon_Comprehensive_Report.pdf');
+  if (fs.existsSync(pdfPath)) {
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename="NexusEquip_Hackathon_Comprehensive_Report.pdf"');
+    fs.createReadStream(pdfPath).pipe(res);
+  } else {
+    res.status(404).send('PDF report not found');
+  }
+});
+
+// Health check endpoint
 app.get('/api/health', (req, res) => {
   try {
     const userCount = db.prepare('SELECT COUNT(*) as c FROM users').get().c;
