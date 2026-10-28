@@ -32,7 +32,7 @@ class NumberedCanvas(canvas.Canvas):
         
         # Header (pages > 1)
         if self._pageNumber > 1:
-            self.drawString(54, 750, "NexusEquip: Institutional Resource & Equipment Sharing Platform")
+            self.drawString(54, 750, "Nexora: Institutional Resource & Equipment Sharing Platform")
             self.setStrokeColor(colors.HexColor("#e2e8f0"))
             self.setLineWidth(0.5)
             self.line(54, 742, letter[0] - 54, 742)
@@ -58,12 +58,11 @@ def build_pdf(filename):
 
     styles = getSampleStyleSheet()
 
-    # Custom styles
-    primary_color = colors.HexColor("#4f46e5")    # Indigo-600
-    dark_neutral = colors.HexColor("#0f172a")     # Slate-900
-    text_muted = colors.HexColor("#475569")       # Slate-600
-    light_bg = colors.HexColor("#f8fafc")         # Slate-50
-    border_color = colors.HexColor("#e2e8f0")     # Slate-200
+    primary_color = colors.HexColor("#4f46e5")
+    dark_neutral = colors.HexColor("#0f172a")
+    text_muted = colors.HexColor("#475569")
+    light_bg = colors.HexColor("#f8fafc")
+    border_color = colors.HexColor("#e2e8f0")
 
     title_style = ParagraphStyle(
         'DocTitle',
@@ -94,18 +93,6 @@ def build_pdf(filename):
         textColor=dark_neutral,
         spaceBefore=14,
         spaceAfter=8,
-        keepWithNext=True
-    )
-
-    h2_style = ParagraphStyle(
-        'Heading2_Custom',
-        parent=styles['Normal'],
-        fontName='Helvetica-Bold',
-        fontSize=11,
-        leading=15,
-        textColor=primary_color,
-        spaceBefore=10,
-        spaceAfter=4,
         keepWithNext=True
     )
 
@@ -157,7 +144,7 @@ def build_pdf(filename):
     elements = []
 
     # Title & Header
-    elements.append(Paragraph("NexusEquip Platform", title_style))
+    elements.append(Paragraph("Nexora Platform", title_style))
     elements.append(Paragraph("<b>Comprehensive Hackathon Architecture, Problem, Solution, Tech Stack &amp; API Report</b>", subtitle_style))
     elements.append(Paragraph("<b>Challenge:</b> Unlock Underused Equipment and Spaces &nbsp;|&nbsp; <b>Repository:</b> https://github.com/shiivuuu/hachk &nbsp;|&nbsp; <b>Deployment:</b> Vercel + Render", callout_style))
     elements.append(Spacer(1, 8))
@@ -181,15 +168,15 @@ def build_pdf(filename):
     elements.append(Spacer(1, 10))
 
     # SECTION 2: THE PROPOSED SOLUTION
-    elements.append(Paragraph("2. The Proposed Solution: NexusEquip Trust &amp; Governance OS", h1_style))
+    elements.append(Paragraph("2. The Proposed Solution: Nexora Trust &amp; Governance OS", h1_style))
     elements.append(Paragraph(
-        "<b>NexusEquip</b> is a multi-tenant institutional resource exchange platform that balances open access with rigorous safety governance, explainable allocation fairness, and human-in-the-loop dispute resolution. NexusEquip formalizes the complete <b>10-Step Sharing Lifecycle</b>:",
+        "<b>Nexora</b> is a multi-tenant institutional resource exchange platform that balances open access with rigorous safety governance, explainable allocation fairness, and human-in-the-loop dispute resolution. Nexora formalizes the complete <b>10-Step Sharing Lifecycle</b>:",
         body_style
     ))
 
     # 10-Step Lifecycle Table
     steps_data = [
-        [Paragraph("Step", table_header_style), Paragraph("Lifecycle Phase", table_header_style), Paragraph("NexusEquip Architectural Implementation", table_header_style)],
+        [Paragraph("Step", table_header_style), Paragraph("Lifecycle Phase", table_header_style), Paragraph("Nexora Architectural Implementation", table_header_style)],
         [Paragraph("<b>01</b>", table_cell_style), Paragraph("<b>Resource Listing</b>", table_cell_style), Paragraph("Owner defines specifications, hourly rate, security deposit, required certifications, and staff supervision rules.", table_cell_style)],
         [Paragraph("<b>02</b>", table_cell_style), Paragraph("<b>Discovery &amp; Pre-Flight</b>", table_cell_style), Paragraph("Natural Language AI Matcher parses complex queries; system performs real-time pre-flight check of user training credentials.", table_cell_style)],
         [Paragraph("<b>03</b>", table_cell_style), Paragraph("<b>Request Submission</b>", table_cell_style), Paragraph("User submits purpose-weighted booking request with project abstract, duration, and safety supervisor name.", table_cell_style)],
@@ -219,7 +206,7 @@ def build_pdf(filename):
     # SECTION 3: TECHNOLOGY STACK USED
     elements.append(Paragraph("3. Technology Stack &amp; Modular System Architecture", h1_style))
     elements.append(Paragraph(
-        "NexusEquip is engineered as a clean monorepo organized into independent tiers for optimal scalability, reliability, and automated cloud deployments:",
+        "Nexora is engineered as a clean monorepo organized into independent tiers for optimal scalability, reliability, and automated cloud deployments:",
         body_style
     ))
 
@@ -291,7 +278,7 @@ def build_pdf(filename):
     # SECTION 5: AI & ALGORITHMIC INNOVATION
     elements.append(Paragraph("5. AI Algorithms &amp; Mathematical Fairness Design", h1_style))
     elements.append(Paragraph(
-        "NexusEquip avoids 'black box' AI decision-making. In compliance with event guidelines, all access and penalty recommendations remain strictly reviewable by an authorized human safety officer.",
+        "Nexora avoids 'black box' AI decision-making. In compliance with event guidelines, all access and penalty recommendations remain strictly reviewable by an authorized human safety officer.",
         body_style
     ))
     elements.append(Paragraph("• <b>Explainable Fair Allocation Formula:</b> Priority score is computed mathematically as: <i>Score = w(purpose) + 0.2 × Trust + 1.5 × WaitHours - Penalty(Usage)</i>. Academic Thesis grants +40 pts; Coursework +30 pts; Student Innovation +25 pts; Commercial +10 pts. Users consuming over 10 hours/week suffer progressive score decay to eliminate monopolization.", bullet_style))
@@ -335,11 +322,10 @@ def build_pdf(filename):
     elements.append(Paragraph("• <b>Backend on Render:</b> Connect <code>shiivuuu/hachk</code> ➔ Blueprint automatically detects <code>render.yaml</code>, installs packages, runs automated database seeds, and binds to production port.", bullet_style))
     elements.append(Paragraph("• <b>Localhost Testing:</b> Run backend on <code>http://localhost:5000</code> and frontend on <code>http://localhost:5173</code>.", bullet_style))
 
-    # Build the document
     doc.build(elements, canvasmaker=NumberedCanvas)
     print(f"PDF Successfully generated at: {filename}")
 
 if __name__ == '__main__':
     out_dir = os.path.dirname(os.path.abspath(__file__))
-    target_path = os.path.join(out_dir, "NexusEquip_Hackathon_Comprehensive_Report.pdf")
+    target_path = os.path.join(out_dir, "Nexora_Hackathon_Comprehensive_Report.pdf")
     build_pdf(target_path)

@@ -10,9 +10,8 @@ import {
 import { api } from '../services/api';
 
 export default function AiAssistantTab({ refreshCount = 0 }) {
-  const [activeSubTab, setActiveSubTab] = useState('vision'); // vision | fairness
+  const [activeSubTab, setActiveSubTab] = useState('vision');
   
-  // Vision Simulator State
   const [initialCond, setInitialCond] = useState('pristine');
   const [initialNotes, setInitialNotes] = useState('Clean bed, all collets accounted for, E-stop tested');
   const [finalCond, setFinalCond] = useState('damaged');
@@ -21,7 +20,6 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
   const [visionResult, setVisionResult] = useState(null);
   const [loadingVision, setLoadingVision] = useState(false);
 
-  // Fairness Report State
   const [fairnessReport, setFairnessReport] = useState(null);
 
   useEffect(() => {
@@ -58,15 +56,13 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
 
   return (
     <div className="space-y-6">
-      
-      {/* Header */}
       <div>
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold mb-2">
           <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
           <span>Autonomous Trust &amp; Fairness AI Architecture</span>
         </div>
         <h1 className="text-2xl font-extrabold text-slate-900">
-          NexusEquip AI Safety &amp; Governance Studio
+          Nexora AI Safety &amp; Governance Studio
         </h1>
         <p className="text-xs text-slate-500 mt-1 max-w-3xl">
           Inspect our 4 dedicated AI systems: Pre/Post Vision Condition Analyzer, Anti-Monopolization Fairness Curve, 
@@ -74,7 +70,6 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
         </p>
       </div>
 
-      {/* Sub Navigation */}
       <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
         <button
           onClick={() => setActiveSubTab('vision')}
@@ -101,11 +96,8 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
         </button>
       </div>
 
-      {/* Module 1: Pre/Post Condition Vision Diff */}
       {activeSubTab === 'vision' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
-          {/* Simulator Inputs */}
           <div className="rounded-2xl border border-slate-200 bg-white p-5 space-y-4 shadow-xs">
             <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <Eye className="w-4 h-4 text-indigo-600" />
@@ -198,7 +190,6 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
             </div>
           </div>
 
-          {/* AI Output Card */}
           <div className="rounded-2xl border border-slate-200 bg-white p-5 space-y-4 shadow-xs flex flex-col justify-between">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -215,7 +206,6 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
                 </span>
               </div>
 
-              {/* Executive Summary */}
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2">
                 <p className="font-bold text-slate-900">Summary Assessment:</p>
                 <p className="text-slate-700 leading-relaxed text-xs">
@@ -223,7 +213,6 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
                 </p>
               </div>
 
-              {/* Detailed Findings */}
               <div className="space-y-1.5">
                 <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
                   Detailed Diagnostic Findings:
@@ -238,7 +227,6 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
                 </div>
               </div>
 
-              {/* Action items */}
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
                   <span className="text-[10px] text-slate-500 block">Est. Repair Cost</span>
@@ -260,13 +248,9 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
         </div>
       )}
 
-      {/* Module 2: Anti-Monopoly & Fair Allocation Engine */}
       {activeSubTab === 'fairness' && (
         <div className="space-y-6">
-          
-          {/* Metrics Overview Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            
             <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1 shadow-xs">
               <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                 Distribution Health
@@ -302,10 +286,8 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
                 Assets operating under 15% capacity promoted to student innovators.
               </p>
             </div>
-
           </div>
 
-          {/* Underused Equipment Recommendations */}
           <div className="rounded-2xl border border-slate-200 bg-white p-5 space-y-4 shadow-xs">
             <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-indigo-600" />
@@ -326,7 +308,6 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
             </div>
           </div>
 
-          {/* Monopolization Alerts */}
           {fairnessReport?.monopolizationAlerts?.length > 0 && (
             <div className="rounded-2xl border border-amber-200 bg-amber-50/50 p-5 space-y-3">
               <h3 className="text-sm font-bold text-amber-800 flex items-center gap-2">
@@ -348,7 +329,6 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
               </div>
             </div>
           )}
-
         </div>
       )}
 

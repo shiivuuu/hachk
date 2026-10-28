@@ -17,7 +17,6 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
   const [eligibility, setEligibility] = useState(null);
   const [checkingEligibility, setCheckingEligibility] = useState(true);
 
-  // Form state
   const [startDate, setStartDate] = useState(new Date(Date.now() + 86400000).toISOString().split('T')[0]);
   const [startTime, setStartTime] = useState('10:00');
   const [durationHours, setDurationHours] = useState(resource.min_hours || 2);
@@ -90,8 +89,6 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs overflow-y-auto">
       <div className="relative w-full max-w-2xl rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95">
-        
-        {/* Header */}
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700">
@@ -130,8 +127,6 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-5">
-            
-            {/* Step 2 Pre-flight Eligibility Banner */}
             <div className="rounded-xl border p-3.5 bg-slate-50 border-slate-200">
               {checkingEligibility ? (
                 <div className="flex items-center gap-2 text-xs text-slate-500">
@@ -168,7 +163,6 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
               )}
             </div>
 
-            {/* Purpose & Fairness Weight */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center justify-between">
                 <span>Project Purpose (Affects Step 4 Fairness Score)</span>
@@ -189,7 +183,6 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
               </select>
             </div>
 
-            {/* Project Title */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Research Project Title &amp; Objective
@@ -204,7 +197,6 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
               />
             </div>
 
-            {/* Date & Time Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
@@ -247,7 +239,6 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
               </div>
             </div>
 
-            {/* Supervisor presence */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Faculty / Safety Supervisor
@@ -261,7 +252,6 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
               />
             </div>
 
-            {/* Error banner */}
             {errorMsg && (
               <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0" />
@@ -269,16 +259,14 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
               </div>
             )}
 
-            {/* Anti-Monopolization notice */}
             <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-[11px] text-indigo-900 flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
               <span>
-                <strong>NexusEquip Fair Allocation Engine Active:</strong> Rolling 7-day usage limits prevent monopolization. 
+                <strong>Nexora Fair Allocation Engine Active:</strong> Rolling 7-day usage limits prevent monopolization. 
                 Thesis and coursework projects receive transparent allocation priority.
               </span>
             </div>
 
-            {/* Modal Actions */}
             <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
               <button
                 type="button"

@@ -1,4 +1,4 @@
-# ⚡ NexusEquip: Institutional Resource & Equipment Sharing Platform
+# ⚡ Nexora: Institutional Resource & Equipment Sharing Platform
 
 > **Hackathon Challenge:** Unlock Underused Equipment and Spaces  
 > **Repository:** [https://github.com/shiivuuu/hachk](https://github.com/shiivuuu/hachk)  
@@ -18,7 +18,7 @@ At the same time, students, researchers, and early-stage startup creators strugg
 
 Ordinary room booking systems fail because they treat specialized technical equipment like standard desks: **they ignore operator safety credentials, baseline condition tracking, dispute liability, and fair quota allocation**.
 
-**NexusEquip** solves this with an end-to-end trusted resource-sharing OS featuring:
+**Nexora** solves this with an end-to-end trusted resource-sharing OS featuring:
 1. **Pre-Flight Safety Qualification Checking** (verifying laser, biohazard, and machining certifications).
 2. **Transparent Fair Allocation & Anti-Monopolization Scoring** (mathematically preventing dominant groups from hoarding equipment).
 3. **Step 7 & 8 Station Condition Handover Studios** (documenting pre-existing wear to protect users, followed by AI Computer Vision discrepancy analysis).
@@ -35,7 +35,7 @@ The repository is cleanly partitioned into dedicated modules:
 hachk/
 ├── frontend/               # React 19 + Vite 8 + Tailwind CSS v4 UI (Vercel Ready)
 │   ├── src/
-│   │   ├── components/     # Steppers, Modals (Steps 1-10), Persona Switcher
+│   │   ├── components/     # Modals (Steps 1-10), Steppers, Persona Switcher, ProfileModal
 │   │   ├── pages/          # Catalog, Bookings, Manager Dashboard, AI Studio, Audit
 │   │   └── services/api.js # Centralized API client with offline fallback simulation
 │   ├── vercel.json         # Vercel SPA routing configuration
@@ -46,7 +46,7 @@ hachk/
 │   │   ├── routes/         # auth, resources, bookings, incidents, certs, audit, ai
 │   │   ├── services/       # FairAllocationService, AuditService
 │   │   └── server.js       # Production server entrypoint
-│   ├── tests/              # End-to-end 10-step lifecycle test suites
+│   ├── tests/              # End-to-end 10-step lifecycle & custom profile test suites
 │   └── render.yaml         # Render blueprint configuration
 ├── ai/                     # Standalone AI Safety & Fairness Suite
 │   ├── matcher.js          # Natural Language capability search & taxonomy engine
@@ -64,7 +64,8 @@ hachk/
 │   ├── HACKATHON_SUBMISSION.md   # Official 12-section submission document
 │   ├── JUDGE_TESTING_GUIDE.md    # 3-minute evaluator walkthrough & demo accounts
 │   ├── DEPLOYMENT_GUIDE.md       # Step-by-step Vercel & Render deployment guide
-│   └── API_DOCUMENTATION.md      # Full REST API endpoints specification
+│   ├── API_DOCUMENTATION.md      # Full REST API endpoints specification
+│   └── generate_pdf.py           # Automated PDF documentation generator
 ├── render.yaml             # Root Render blueprint specification
 ├── vercel.json             # Root Vercel edge deployment configuration
 └── README.md               # Main project presentation
@@ -74,7 +75,7 @@ hachk/
 
 ## 🎯 100% 10-Step Hackathon Workflow Checklist
 
-| Step | Lifecycle Stage | NexusEquip Implementation | Verified |
+| Step | Lifecycle Stage | Nexora Implementation | Verified |
 |---|---|---|:---:|
 | **01** | **Owner Lists Resource** | Multi-attribute listing: specs, hourly rates, security deposits, safety prerequisites, staff supervision flags | ✅ |
 | **02** | **Discovery & Eligibility** | Natural Language AI matcher + real-time pre-flight certification eligibility check | ✅ |
@@ -91,7 +92,7 @@ hachk/
 
 ## 👥 Pre-Configured Demo Personas (1-Click Switcher)
 
-Click the **Persona Switcher** in the top-right corner of the web app to switch between personas instantly:
+Click the **Persona Switcher** in the top-right corner of the web app to switch between personas instantly, or click **`+ Create Profile`** to register your own custom persona:
 
 | Persona | Role | Institution | Trust | Qualifications |
 |---|---|---|---|---|
@@ -132,6 +133,9 @@ node backend/tests/lifecycle_e2e_test.js
 
 # Test Step 9 damage detection & incident handling:
 node backend/tests/incident_damage_test.js
+
+# Test custom profile creation & manual detail editing:
+node backend/tests/custom_profile_test.js
 ```
 
 ---
@@ -158,9 +162,10 @@ node backend/tests/incident_damage_test.js
 - [Judge Testing & Step-by-Step Walkthrough Guide](./docs/JUDGE_TESTING_GUIDE.md)
 - [Cloud Deployment Guide (Vercel & Render)](./docs/DEPLOYMENT_GUIDE.md)
 - [REST API Endpoint Documentation](./docs/API_DOCUMENTATION.md)
+- [Comprehensive PDF Report (Direct Download)](./Nexora_Hackathon_Comprehensive_Report.pdf)
 - [UI/UX Design System & Tokens](./uiux/DESIGN_SYSTEM.md)
 - [System Architecture Diagram (SVG)](./uiux/ARCHITECTURE.svg)
 
 ---
 
-*NexusEquip — Built with pride for the 2026 Unlock Underused Equipment and Spaces Hackathon.*
+*Nexora — Built with pride for the 2026 Unlock Underused Equipment and Spaces Hackathon.*

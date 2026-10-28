@@ -1,7 +1,7 @@
 {
-  "name": "nexusequip-backend",
+  "name": "nexora-backend",
   "version": "1.0.0",
-  "description": "NexusEquip Backend: Institutional Resource & Equipment Sharing Platform",
+  "description": "Nexora Backend: Institutional Resource & Equipment Sharing Platform",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -17,7 +17,7 @@
     "hackathon",
     "audit-trail"
   ],
-  "author": "NexusEquip Team",
+  "author": "Nexora Team",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",

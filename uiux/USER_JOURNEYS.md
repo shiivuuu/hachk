@@ -1,4 +1,4 @@
-# 🗺️ NexusEquip User Journeys & Workflow Architecture
+# 🗺️ Nexora User Journeys & Workflow Architecture
 
 This document maps the primary user personas and their end-to-end interactions across the 10-step equipment sharing lifecycle.
 
@@ -30,7 +30,7 @@ sequenceDiagram
     autonumber
     actor Owner as Dr. Sarah Chen (Manager)
     actor User as Alex Rivera (Researcher)
-    participant Platform as NexusEquip Platform
+    participant Platform as Nexora Platform
     participant AI as AI Safety & Fairness Suite
     participant Audit as Immutable Ledger
 

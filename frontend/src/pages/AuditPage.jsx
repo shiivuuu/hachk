@@ -36,14 +36,16 @@ export default function AuditPage({ refreshCount = 0 }) {
     STEP8_RETURN_COMPLETED: { label: 'Step 8: Return Handover', color: 'bg-teal-50 text-teal-700 border-teal-200' },
     STEP9_DAMAGE_INCIDENT_FLAGGED: { label: 'Step 9: AI Damage Discrepancy', color: 'bg-rose-50 text-rose-700 border-rose-200' },
     INCIDENT_RESOLVED: { label: 'Step 9: Dispute Resolved', color: 'bg-purple-50 text-purple-700 border-purple-200' },
-    CERTIFICATE_AI_VERIFIED: { label: 'AI Safety Cert Verified', color: 'bg-cyan-50 text-cyan-700 border-cyan-200' }
+    CERTIFICATE_AI_VERIFIED: { label: 'AI Safety Cert Verified', color: 'bg-cyan-50 text-cyan-700 border-cyan-200' },
+    USER_PROFILE_CREATED: { label: 'User Profile Created', color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
+    USER_PROFILE_UPDATED: { label: 'User Profile Updated', color: 'bg-blue-50 text-blue-700 border-blue-200' }
   };
 
   const exportAuditLogJson = () => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(logs, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `nexusequip-audit-ledger-${Date.now()}.json`);
+    downloadAnchor.setAttribute("download", `nexora-audit-ledger-${Date.now()}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -51,8 +53,6 @@ export default function AuditPage({ refreshCount = 0 }) {
 
   return (
     <div className="space-y-6">
-      
-      {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs uppercase font-extrabold tracking-wider text-indigo-700">
@@ -77,14 +77,14 @@ export default function AuditPage({ refreshCount = 0 }) {
         </div>
       </div>
 
-      {/* Filter Chips */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-2 sm:pb-0">
         {[
           { id: 'all', label: 'All Ledger Events' },
           { id: 'booking', label: 'Bookings & Lifecycle' },
           { id: 'incident', label: 'Incidents & Damages' },
           { id: 'resource', label: 'Equipment Listings' },
-          { id: 'certification', label: 'Safety Certifications' }
+          { id: 'certification', label: 'Safety Certifications' },
+          { id: 'user', label: 'User Identity Events' }
         ].map((f) => (
           <button
             key={f.id}
@@ -100,7 +100,6 @@ export default function AuditPage({ refreshCount = 0 }) {
         ))}
       </div>
 
-      {/* Audit Log Stream */}
       {logs.length === 0 ? (
         <div className="p-16 text-center rounded-2xl border border-slate-200 bg-white shadow-xs">
           <History className="w-10 h-10 text-slate-400 mx-auto mb-3" />
@@ -118,8 +117,6 @@ export default function AuditPage({ refreshCount = 0 }) {
                 className="rounded-2xl border border-slate-200 bg-white hover:border-slate-300 transition-all p-4 space-y-3 shadow-xs"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  
-                  {/* Left: Action & Entity */}
                   <div className="flex items-center gap-3">
                     <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${badge.color}`}>
                       {badge.label}
@@ -134,7 +131,6 @@ export default function AuditPage({ refreshCount = 0 }) {
                     </div>
                   </div>
 
-                  {/* Right: Timestamp & Diff Trigger */}
                   <div className="flex items-center gap-3 text-xs text-slate-500 self-end sm:self-auto font-medium">
                     <span className="flex items-center gap-1 font-mono text-[11px]">
                       <Clock className="w-3.5 h-3.5 text-slate-400" />
@@ -149,10 +145,8 @@ export default function AuditPage({ refreshCount = 0 }) {
                       <span>{isExpanded ? 'Hide Payload' : 'Inspect Payload'}</span>
                     </button>
                   </div>
-
                 </div>
 
-                {/* Expanded JSON details payload */}
                 {isExpanded && (
                   <div className="mt-2 p-3 rounded-xl bg-slate-50 border border-slate-200 font-mono text-[11px] text-slate-800 overflow-x-auto animate-in fade-in">
                     <div className="flex items-center justify-between mb-1 pb-1 border-b border-slate-200 text-slate-500 text-[10px]">
@@ -162,13 +156,11 @@ export default function AuditPage({ refreshCount = 0 }) {
                     <pre>{JSON.stringify(log.details, null, 2)}</pre>
                   </div>
                 )}
-
               </div>
             );
           })}
         </div>
       )}
-
     </div>
   );
 }

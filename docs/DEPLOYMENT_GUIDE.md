@@ -1,6 +1,6 @@
-# 🌐 NexusEquip Deployment Guide: Vercel & Render
+# 🌐 Nexora Deployment Guide: Vercel & Render
 
-NexusEquip is designed for clean, decoupled deployment:
+Nexora is designed for clean, decoupled deployment:
 - **Frontend:** Edge-deployed SPA on **Vercel**
 - **Backend:** Node.js Web Service on **Render** (or Docker container)
 
@@ -13,6 +13,7 @@ NexusEquip is designed for clean, decoupled deployment:
 2. Log in to [Render Dashboard](https://dashboard.render.com).
 3. Click **New +** -> **Blueprint**.
 4. Connect the repository `shiivuuu/hachk`. Render will automatically detect `render.yaml` and configure the web service:
+   - **Service Name:** `nexora-backend`
    - **Root Directory:** `backend`
    - **Build Command:** `npm install`
    - **Start Command:** `npm start`
@@ -21,7 +22,7 @@ NexusEquip is designed for clean, decoupled deployment:
      - `PORT=10000`
      - `JWT_SECRET=(auto-generated)`
 5. Click **Apply**. The backend will build, auto-seed the SQLite database via `postinstall`, and launch.
-6. Note your Render service URL: e.g., `https://nexusequip-backend.onrender.com`.
+6. Note your Render service URL: e.g., `https://nexora-backend.onrender.com`.
 
 ### Option B: Manual Web Service Setup on Render
 1. In Render, select **New Web Service**.
@@ -55,7 +56,7 @@ NexusEquip is designed for clean, decoupled deployment:
 5. **Environment Variables:**
    Add one environment variable:
    - `VITE_API_URL` = `https://<your-render-backend-url>/api`  
-     *(e.g., `https://nexusequip-backend.onrender.com/api`)*
+     *(e.g., `https://nexora-backend.onrender.com/api`)*
 6. Click **Deploy**. Vercel will build and deploy the frontend in ~20 seconds.
 
 ### Single-Repository Vercel Deployment (Alternative):

@@ -4,7 +4,6 @@ const morgan = require('morgan');
 const path = require('path');
 const fs = require('fs');
 
-// Import routes
 const authRoutes = require('./routes/auth.routes');
 const resourceRoutes = require('./routes/resources.routes');
 const bookingRoutes = require('./routes/bookings.routes');
@@ -28,11 +27,13 @@ app.use(morgan('dev'));
 
 // Direct PDF download & view route
 app.get('/report.pdf', (req, res) => {
-  const pdfPath = path.join(__dirname, '../../NexusEquip_Hackathon_Comprehensive_Report.pdf');
-  if (fs.existsSync(pdfPath)) {
+  const pdfPath = path.join(__dirname, '../../Nexora_Hackathon_Comprehensive_Report.pdf');
+  const fallbackPath = path.join(__dirname, '../../NexusEquip_Hackathon_Comprehensive_Report.pdf');
+  const target = fs.existsSync(pdfPath) ? pdfPath : fallbackPath;
+  if (fs.existsSync(target)) {
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'inline; filename="NexusEquip_Hackathon_Comprehensive_Report.pdf"');
-    fs.createReadStream(pdfPath).pipe(res);
+    res.setHeader('Content-Disposition', 'inline; filename="Nexora_Hackathon_Comprehensive_Report.pdf"');
+    fs.createReadStream(target).pipe(res);
   } else {
     res.status(404).send('PDF report not found');
   }
@@ -47,7 +48,7 @@ app.get('/api/health', (req, res) => {
 
     res.json({
       status: 'healthy',
-      system: 'NexusEquip Platform API',
+      system: 'Nexora Platform API',
       version: '1.0.0',
       database: 'connected (SQLite WAL)',
       records: {
@@ -71,12 +72,10 @@ app.use('/api/certifications', certRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/ai', aiRoutes);
 
-// 404 handler
 app.use((req, res) => {
   res.status(404).json({ success: false, error: `Route not found: ${req.method} ${req.url}` });
 });
 
-// Error handler
 app.use((err, req, res, next) => {
   console.error('Unhandled Server Error:', err);
   res.status(500).json({

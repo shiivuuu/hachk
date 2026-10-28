@@ -1,4 +1,4 @@
-# 📡 NexusEquip REST API Specification
+# 📡 Nexora REST API Specification
 
 Base URL (Local): `http://localhost:5000/api`  
 Base URL (Production): `https://<render-service-url>/api`
@@ -13,7 +13,7 @@ Returns system status, active database engine, and record counts.
 ```json
 {
   "status": "healthy",
-  "system": "NexusEquip Platform API",
+  "system": "Nexora Platform API",
   "version": "1.0.0",
   "database": "connected (SQLite WAL)",
   "records": { "users": 5, "resources": 8, "bookings": 5 }
@@ -24,7 +24,28 @@ Returns system status, active database engine, and record counts.
 
 ## 2. Authentication & Personas
 ### `GET /auth/users`
-Returns all seeded user accounts with verified certification counts.
+Returns all seeded and registered user accounts with verified certification counts.
+
+### `POST /auth/register`
+**Lifecycle Role:** Custom Profile Creation  
+**Body:**
+```json
+{
+  "name": "Shivam Sharma",
+  "email": "shivam@college.edu",
+  "role": "researcher",
+  "institution": "Indian Institute of Technology",
+  "department": "Robotics & Advanced Fabrication",
+  "phone": "+91 98765 43210",
+  "bio": "Building autonomous aerial robotics prototypes.",
+  "credits": 1500,
+  "trust_score": 95
+}
+```
+
+### `PUT /auth/users/:id`
+**Lifecycle Role:** Manual Detail Management  
+**Body:** `{ "name", "role", "institution", "department", "phone", "bio", "credits", "trust_score" }`
 
 ### `POST /auth/login`
 **Body:** `{ "email": "manager@mit.edu", "password": "password123" }`  

@@ -1,5 +1,5 @@
 /**
- * NexusEquip Centralized API Service
+ * Nexora Centralized API Service
  * Points to VITE_API_URL or defaults to localhost:5000/api
  * Includes intelligent local fallback mock data in case backend is offline
  */
@@ -22,11 +22,11 @@ let activeUser = {
 
 export const setActiveUser = (user) => {
   activeUser = user;
-  localStorage.setItem('nexusequip_active_user', JSON.stringify(user));
+  localStorage.setItem('nexora_active_user', JSON.stringify(user));
 };
 
 export const getActiveUser = () => {
-  const saved = localStorage.getItem('nexusequip_active_user');
+  const saved = localStorage.getItem('nexora_active_user');
   if (saved) {
     try {
       activeUser = JSON.parse(saved);

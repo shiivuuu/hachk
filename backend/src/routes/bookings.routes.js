@@ -6,9 +6,6 @@ const { calculateFairnessScore, detectConflicts, prioritizeWaitlist } = require(
 const { recordAudit } = require('../services/auditService');
 const { analyzeConditionDiff } = require('../../../ai/condition_analyzer');
 
-/**
- * GET /api/bookings
- */
 router.get('/', (req, res) => {
   try {
     const { userId, resourceId, status } = req.query;
@@ -57,9 +54,6 @@ router.get('/', (req, res) => {
   }
 });
 
-/**
- * GET /api/bookings/:id
- */
 router.get('/:id', (req, res) => {
   try {
     const booking = db.prepare(`
@@ -113,10 +107,6 @@ router.get('/:id', (req, res) => {
   }
 });
 
-/**
- * POST /api/bookings (Steps 3 & 4 in Lifecycle)
- * Submit booking request, verify eligibility, compute fair allocation score, handle conflicts
- */
 router.post('/', (req, res) => {
   try {
     const {
@@ -136,7 +126,6 @@ router.post('/', (req, res) => {
     const resource = db.prepare('SELECT * FROM resources WHERE id = ?').get(resource_id);
     if (!resource) return res.status(404).json({ success: false, error: 'Resource not found' });
 
-    // Step 4: System verifies applicable safety requirements & certifications
     const requiredCerts = JSON.parse(resource.required_certifications || '[]');
     const userCerts = db.prepare("SELECT * FROM certifications WHERE user_id = ? AND status = 'verified'").all(actorId);
     const userCertTitles = userCerts.map(c => c.title.toLowerCase());
@@ -153,14 +142,12 @@ router.post('/', (req, res) => {
       });
     }
 
-    // Step 4: Calculate transparent fair allocation score
     const fairness = calculateFairnessScore({
       userId: actorId,
       resourceId: resource_id,
       purpose: purpose || 'Academic Thesis / Core Research'
     });
 
-    // Step 4: Detect scheduling conflicts
     const conflicts = detectConflicts(resource_id, start_time, end_time);
     const isConflicted = conflicts.length > 0;
 
@@ -171,7 +158,6 @@ router.post('/', (req, res) => {
     let waitlistPosition = null;
 
     if (isConflicted) {
-      // Find current waitlist length for this resource
       const waitlistCount = db.prepare("SELECT COUNT(*) as c FROM bookings WHERE resource_id = ? AND status = 'waitlisted'").get(resource_id);
       waitlistPosition = (waitlistCount ? waitlistCount.c : 0) + 1;
     }
@@ -200,7 +186,6 @@ router.post('/', (req, res) => {
       JSON.stringify(fairness)
     );
 
-    // Record immutable audit log
     recordAudit({
       entityType: 'booking',
       entityId: bookingId,
@@ -218,7 +203,6 @@ router.post('/', (req, res) => {
       }
     });
 
-    // Notify resource owner
     const notifyStmt = db.prepare(`
       INSERT INTO notifications (id, user_id, title, message, type, link)
       VALUES (?, ?, ?, ?, ?, ?)
@@ -252,10 +236,6 @@ router.post('/', (req, res) => {
   }
 });
 
-/**
- * POST /api/bookings/:id/approve (Steps 5 & 6)
- * Lab manager approves request
- */
 router.post('/:id/approve', (req, res) => {
   try {
     const booking = db.prepare('SELECT b.*, r.title as resource_title, r.owner_id FROM bookings b JOIN resources r ON b.resource_id = r.id WHERE b.id = ?').get(req.params.id);
@@ -271,7 +251,6 @@ router.post('/:id/approve', (req, res) => {
       WHERE id = ?
     `).run(approval_notes, booking.id);
 
-    // Record immutable audit log
     recordAudit({
       entityType: 'booking',
       entityId: booking.id,
@@ -282,7 +261,6 @@ router.post('/:id/approve', (req, res) => {
       details: { approval_notes, bookingCode: booking.booking_code, resourceTitle: booking.resource_title }
     });
 
-    // Notify user
     db.prepare(`
       INSERT INTO notifications (id, user_id, title, message, type, link)
       VALUES (?, ?, ?, ?, ?, ?)
@@ -301,10 +279,6 @@ router.post('/:id/approve', (req, res) => {
   }
 });
 
-/**
- * POST /api/bookings/:id/reject (Steps 5 & 6)
- * Lab manager rejects request with explainable reason
- */
 router.post('/:id/reject', (req, res) => {
   try {
     const booking = db.prepare('SELECT b.*, r.title as resource_title FROM bookings b JOIN resources r ON b.resource_id = r.id WHERE b.id = ?').get(req.params.id);
@@ -320,7 +294,6 @@ router.post('/:id/reject', (req, res) => {
       WHERE id = ?
     `).run(rejection_reason, booking.id);
 
-    // Record immutable audit log
     recordAudit({
       entityType: 'booking',
       entityId: booking.id,
@@ -331,7 +304,6 @@ router.post('/:id/reject', (req, res) => {
       details: { rejection_reason, bookingCode: booking.booking_code, resourceTitle: booking.resource_title }
     });
 
-    // Notify user with explanation
     db.prepare(`
       INSERT INTO notifications (id, user_id, title, message, type, link)
       VALUES (?, ?, ?, ?, ?, ?)
@@ -350,10 +322,6 @@ router.post('/:id/reject', (req, res) => {
   }
 });
 
-/**
- * POST /api/bookings/:id/checkin (Step 7 in Lifecycle)
- * User checks in and documents initial condition & safety checklist
- */
 router.post('/:id/checkin', (req, res) => {
   try {
     const booking = db.prepare('SELECT b.*, r.title as resource_title FROM bookings b JOIN resources r ON b.resource_id = r.id WHERE b.id = ?').get(req.params.id);
@@ -393,10 +361,8 @@ router.post('/:id/checkin', (req, res) => {
       supervisor_signature || 'Digital Self-Verification Certified'
     );
 
-    // Update booking status to checked_in
     db.prepare("UPDATE bookings SET status = 'checked_in', updated_at = CURRENT_TIMESTAMP WHERE id = ?").run(booking.id);
 
-    // Record immutable audit log
     const user = db.prepare('SELECT * FROM users WHERE id = ?').get(booking.user_id);
     recordAudit({
       entityType: 'booking',
@@ -428,10 +394,6 @@ router.post('/:id/checkin', (req, res) => {
   }
 });
 
-/**
- * POST /api/bookings/:id/return (Step 8, 9, 10 in Lifecycle)
- * User returns resource, documents condition, runs AI damage detection, resolves deposit
- */
 router.post('/:id/return', (req, res) => {
   try {
     const booking = db.prepare('SELECT b.*, r.title as resource_title, r.owner_id, r.deposit FROM bookings b JOIN resources r ON b.resource_id = r.id WHERE b.id = ?').get(req.params.id);
@@ -452,12 +414,10 @@ router.post('/:id/return', (req, res) => {
 
     const returnId = `ret_${uuidv4().slice(0, 8)}`;
 
-    // Fetch initial checkin to perform AI condition diff
     const checkin = db.prepare('SELECT * FROM checkins WHERE booking_id = ?').get(booking.id);
     const initialCondition = checkin ? checkin.initial_condition_status : 'good';
     const initialNotes = checkin ? checkin.initial_notes : '';
 
-    // RUN AI CONDITION VISION ANALYZER
     const aiAnalysis = analyzeConditionDiff({
       initialCondition,
       initialNotes,
@@ -471,7 +431,6 @@ router.post('/:id/return', (req, res) => {
     const depositStatus = aiAnalysis.recommendedDepositAction;
     const nextBookingStatus = isDamageDetected ? 'incident_reported' : 'completed';
 
-    // Insert Return Record
     const insertReturn = db.prepare(`
       INSERT INTO returns (
         id, booking_id, returned_by, final_condition_status, final_notes,
@@ -495,7 +454,6 @@ router.post('/:id/return', (req, res) => {
       inspector_id || booking.owner_id
     );
 
-    // If damage detected, create Incident automatically (Step 9)
     let incidentId = null;
     if (isDamageDetected) {
       incidentId = `inc_${uuidv4().slice(0, 8)}`;
@@ -517,13 +475,12 @@ router.post('/:id/return', (req, res) => {
         aiAnalysis.executiveSummary
       );
 
-      // Record incident audit
       recordAudit({
         entityType: 'incident',
         entityId: incidentId,
         action: 'STEP9_DAMAGE_INCIDENT_FLAGGED',
         actorId: 'ai_engine',
-        actorName: 'NexusEquip AI Safety Guard',
+        actorName: 'Nexora AI Safety Guard',
         actorRole: 'automated_system',
         details: {
           bookingCode: booking.booking_code,
@@ -534,10 +491,8 @@ router.post('/:id/return', (req, res) => {
       });
     }
 
-    // Update booking status
     db.prepare('UPDATE bookings SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?').run(nextBookingStatus, booking.id);
 
-    // Record immutable audit log (Step 10)
     const user = db.prepare('SELECT * FROM users WHERE id = ?').get(booking.user_id);
     recordAudit({
       entityType: 'booking',
@@ -555,7 +510,6 @@ router.post('/:id/return', (req, res) => {
       }
     });
 
-    // Check if waitlist needs re-evaluating or promotion
     prioritizeWaitlist(booking.resource_id);
 
     res.json({

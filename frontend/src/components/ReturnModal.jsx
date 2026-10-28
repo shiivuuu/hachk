@@ -57,7 +57,6 @@ export default function ReturnModal({ booking, onClose, onSuccess }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs overflow-y-auto">
       <div className="relative w-full max-w-xl rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95">
         
-        {/* Header */}
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-teal-700">
@@ -100,7 +99,6 @@ export default function ReturnModal({ booking, onClose, onSuccess }) {
               </p>
             </div>
 
-            {/* AI Analysis Summary Box */}
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2">
               <div className="flex items-center gap-1.5 text-indigo-700 font-bold">
                 <Sparkles className="w-4 h-4 text-indigo-600" />
@@ -129,7 +127,6 @@ export default function ReturnModal({ booking, onClose, onSuccess }) {
               </div>
             </div>
 
-            {/* Final Condition Selector */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Final Equipment Condition Status (Step 8)
@@ -159,7 +156,6 @@ export default function ReturnModal({ booking, onClose, onSuccess }) {
               </div>
             </div>
 
-            {/* Cleanliness rating */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center justify-between">
                 <span>Cleanliness &amp; Handover Rating</span>
@@ -183,7 +179,6 @@ export default function ReturnModal({ booking, onClose, onSuccess }) {
               </div>
             </div>
 
-            {/* Return notes */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Post-Operation Handover Notes (Triggered for AI Vision Scan)
@@ -198,7 +193,6 @@ export default function ReturnModal({ booking, onClose, onSuccess }) {
               />
             </div>
 
-            {/* Consumables / Photo */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
@@ -233,11 +227,10 @@ export default function ReturnModal({ booking, onClose, onSuccess }) {
               </div>
             )}
 
-            {/* AI Automated Diff notice */}
             <div className="p-3 rounded-xl bg-teal-50 border border-teal-200 text-[11px] text-teal-900 flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
               <span>
-                <strong>NexusEquip AI Inspection Guard:</strong> System will automatically compare this submission against your Step 7 baseline to verify deposit refund eligibility.
+                <strong>Nexora AI Inspection Guard:</strong> System will automatically compare this submission against your Step 7 baseline to verify deposit refund eligibility.
               </span>
             </div>
 

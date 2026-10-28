@@ -18,7 +18,7 @@
   </defs>
 
   <!-- Title & Header -->
-  <text x="550" y="45" text-anchor="middle" fill="#ffffff" font-size="24" font-weight="800" letter-spacing="-0.5">NexusEquip System Architecture &amp; Data Fabric</text>
+  <text x="550" y="45" text-anchor="middle" fill="#ffffff" font-size="24" font-weight="800" letter-spacing="-0.5">Nexora System Architecture &amp; Data Fabric</text>
   <text x="550" y="70" text-anchor="middle" fill="#94a3b8" font-size="13">Multi-Institutional Resource Sharing, AI Safety Governance &amp; Immutable Audit Ledger</text>
 
   <!-- Frontend Container (Vercel) -->

@@ -1,11 +1,11 @@
-# 🧪 NexusEquip: Judge Testing & Evaluation Guide
+# 🧪 Nexora: Judge Testing & Evaluation Guide
 
 Welcome, Judges! This guide walks you through verifying the complete **10-step equipment sharing lifecycle** in under 3 minutes.
 
 ---
 
 ## ⚡ Quick-Switch Personas (1-Click Evaluation)
-Use the **Persona Switcher** in the top-right corner of the application to switch roles instantly without logging out:
+Use the **Persona Switcher** in the top-right corner of the application to switch roles instantly without logging out, or click **`+ Create Profile`** to register your own custom persona:
 
 | Persona | Role | Key Attribute | Test Scenario |
 |---|---|---|---|
@@ -100,4 +100,4 @@ Use the **Persona Switcher** in the top-right corner of the application to switc
 
 ---
 
-*Thank you for evaluating NexusEquip! All features are fully functional end-to-end.*
+*Thank you for evaluating Nexora! All features are fully functional end-to-end.*

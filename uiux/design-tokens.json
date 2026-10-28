@@ -1,48 +1,47 @@
 {
-  "name": "NexusEquip Design Tokens",
+  "name": "Nexora Design Tokens",
   "version": "1.0.0",
-  "theme": "Dark Laboratory & Precision Trust",
+  "theme": "High-Precision Laboratory & Trust Framework",
   "colors": {
     "background": {
-      "canvas": "#030712",
-      "surface": "#090d16",
-      "surface_elevated": "#0f172a",
-      "surface_card": "#1e293b99",
-      "backdrop": "rgba(3, 7, 18, 0.85)"
+      "canvas": "#f8fafc",
+      "surface": "#ffffff",
+      "surface_elevated": "#f1f5f9",
+      "surface_card": "#ffffff",
+      "backdrop": "rgba(15, 23, 42, 0.4)"
     },
     "brand": {
-      "primary": "#6366f1",
-      "primary_hover": "#4f46e5",
-      "primary_light": "#818cf8",
-      "accent_cyan": "#06b6d4",
-      "accent_cyan_glow": "#22d3ee"
+      "primary": "#4f46e5",
+      "primary_hover": "#4338ca",
+      "primary_light": "#e0e7ff",
+      "accent_indigo": "#6366f1"
     },
     "semantic": {
-      "success": "#10b981",
-      "success_surface": "rgba(16, 185, 129, 0.12)",
-      "warning": "#f59e0b",
-      "warning_surface": "rgba(245, 158, 11, 0.12)",
-      "danger": "#f43f5e",
-      "danger_surface": "rgba(244, 63, 94, 0.12)",
-      "info": "#0ea5e9",
-      "info_surface": "rgba(14, 165, 233, 0.12)"
+      "success": "#16a34a",
+      "success_surface": "#f0fdf4",
+      "warning": "#d97706",
+      "warning_surface": "#fffbeb",
+      "danger": "#e11d48",
+      "danger_surface": "#fff1f2",
+      "info": "#0284c7",
+      "info_surface": "#f0f9ff"
     },
     "text": {
-      "primary": "#f8fafc",
-      "secondary": "#cbd5e1",
-      "muted": "#94a3b8",
-      "subtle": "#64748b"
+      "primary": "#0f172a",
+      "secondary": "#334155",
+      "muted": "#64748b",
+      "subtle": "#94a3b8"
     },
     "border": {
-      "subtle": "#1e293b",
-      "default": "#334155",
-      "focus": "#6366f1"
+      "subtle": "#f1f5f9",
+      "default": "#e2e8f0",
+      "focus": "#4f46e5"
     }
   },
   "typography": {
     "fontFamily": {
       "sans": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-      "mono": "JetBrains Mono, Fira Code, Menlo, monospace"
+      "mono": "JetBrains Mono, Menlo, monospace"
     },
     "fontSize": {
       "xs": "0.75rem",
@@ -64,8 +63,7 @@
     "full": "9999px"
   },
   "shadows": {
-    "glow_indigo": "0 0 25px -5px rgba(99, 102, 241, 0.3)",
-    "glow_cyan": "0 0 25px -5px rgba(6, 182, 212, 0.3)",
-    "card_elevated": "0 10px 30px -10px rgba(0, 0, 0, 0.5)"
+    "card_subtle": "0 1px 3px 0 rgba(0, 0, 0, 0.05)",
+    "card_elevated": "0 10px 25px -5px rgba(0, 0, 0, 0.08)"
   }
 }
