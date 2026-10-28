@@ -53,69 +53,34 @@ export const api = {
       return data.users;
     } catch (err) {
       console.warn('Backend unavailable, using local users', err);
-      return [
-        {
-          id: 'usr_manager',
-          name: 'Dr. Sarah Chen',
-          email: 'manager@mit.edu',
-          role: 'lab_manager',
-          institution: 'MIT Center for Bits and Atoms',
-          department: 'FabLab & Shared Facilities',
-          trust_score: 98,
-          credits: 2500,
-          avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150',
-          verifiedCertCount: 4
-        },
-        {
-          id: 'usr_researcher',
-          name: 'Alex Rivera',
-          email: 'researcher@stanford.edu',
-          role: 'researcher',
-          institution: 'Stanford Bio-X & Robotics',
-          department: 'Mechanical Engineering & Bio-Robotics',
-          trust_score: 94,
-          credits: 1200,
-          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-          verifiedCertCount: 2
-        },
-        {
-          id: 'usr_student',
-          name: 'Maya Lin',
-          email: 'student@cmu.edu',
-          role: 'student',
-          institution: 'Carnegie Mellon University',
-          department: 'Integrated Innovation Institute',
-          trust_score: 88,
-          credits: 450,
-          avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150',
-          verifiedCertCount: 1
-        },
-        {
-          id: 'usr_creator',
-          name: 'Marcus Vance',
-          email: 'creator@makerhub.org',
-          role: 'community_member',
-          institution: 'Downtown Community MakerSpace',
-          department: 'Hardware Innovation Cohort',
-          trust_score: 82,
-          credits: 300,
-          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-          verifiedCertCount: 1
-        },
-        {
-          id: 'usr_admin',
-          name: 'Dean Arthur Vance',
-          email: 'admin@inst.edu',
-          role: 'admin',
-          institution: 'Inter-Institutional Research Consortium',
-          department: 'Safety & Resource Oversight Board',
-          trust_score: 100,
-          credits: 9999,
-          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
-          verifiedCertCount: 5
-        }
-      ];
+      return [];
     }
+  },
+
+  async createUser(profileData) {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(profileData)
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to create profile');
+    }
+    return data;
+  },
+
+  async updateUser(userId, profileData) {
+    const res = await fetch(`${API_BASE}/auth/users/${userId}`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify(profileData)
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to update profile');
+    }
+    return data;
   },
 
   async getCurrentUser() {

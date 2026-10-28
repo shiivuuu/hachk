@@ -5,7 +5,8 @@ import {
   Sparkles, 
   UploadCloud, 
   CheckCircle2, 
-  Award
+  Award,
+  Plus
 } from 'lucide-react';
 import { api, getActiveUser } from '../services/api';
 import confetti from 'canvas-confetti';
@@ -16,8 +17,9 @@ export default function CertModal({ onClose }) {
   const [loading, setLoading] = useState(false);
   const [showUploadForm, setShowUploadForm] = useState(false);
 
-  // Upload Form
   const [title, setTitle] = useState('5-Axis CNC Mill Certified Operator');
+  const [customTitle, setCustomTitle] = useState('');
+  const [isCustomTitle, setIsCustomTitle] = useState(false);
   const [issuingBody, setIssuingBody] = useState('MIT Environment, Health & Safety (EHS)');
   const [issueDate, setIssueDate] = useState('2025-06-15');
   const [expiryDate, setExpiryDate] = useState('2027-06-15');
@@ -42,14 +44,21 @@ export default function CertModal({ onClose }) {
     setLoading(true);
     setErrorMsg(null);
 
+    const finalTitle = isCustomTitle ? customTitle.trim() : title;
+    if (!finalTitle) {
+      setErrorMsg('Please specify a certification title.');
+      setLoading(false);
+      return;
+    }
+
     try {
       const payload = {
-        title,
+        title: finalTitle,
         issuing_body: issuingBody,
         issue_date: issueDate,
         expiry_date: expiryDate,
         document_url: 'https://example.com/certs/verified-doc.pdf',
-        raw_text_extract: `Certificate of Safety Competency issued to ${currentUser.name} for ${title} under authorized supervision.`
+        raw_text_extract: `Certificate of Safety Competency issued to ${currentUser.name} for ${finalTitle} under authorized supervision.`
       };
 
       const res = await api.uploadCertification(payload);
@@ -59,7 +68,9 @@ export default function CertModal({ onClose }) {
       setTimeout(() => {
         setShowUploadForm(false);
         setAiResult(null);
-      }, 3000);
+        setIsCustomTitle(false);
+        setCustomTitle('');
+      }, 2500);
     } catch (err) {
       setErrorMsg(err.message || 'Failed to submit certification');
     } finally {
@@ -71,7 +82,6 @@ export default function CertModal({ onClose }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs overflow-y-auto">
       <div className="relative w-full max-w-xl rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95">
         
-        {/* Header */}
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700">
@@ -91,7 +101,6 @@ export default function CertModal({ onClose }) {
 
         <div className="p-6 space-y-4">
           
-          {/* Active Certifications List */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-700">
@@ -110,7 +119,7 @@ export default function CertModal({ onClose }) {
               <div className="p-6 text-center rounded-xl bg-slate-50 border border-slate-200">
                 <FileCheck2 className="w-8 h-8 text-slate-400 mx-auto mb-2" />
                 <p className="text-xs text-slate-600">No verified certifications found for this user.</p>
-                <p className="text-[11px] text-slate-400 mt-0.5">Upload training documentation below to unlock specialized facilities.</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">Add training documentation below to unlock specialized facilities.</p>
               </div>
             ) : (
               <div className="space-y-2 max-h-56 overflow-y-auto">
@@ -141,43 +150,64 @@ export default function CertModal({ onClose }) {
             )}
           </div>
 
-          {/* Upload Form */}
           {showUploadForm && (
             <form onSubmit={handleUploadCert} className="pt-3 border-t border-slate-200 space-y-3 animate-in fade-in">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-700">
-                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-                <span>AI Automated Document Verification Scanner</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-700">
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>Safety Document Verification &amp; Registration</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsCustomTitle(!isCustomTitle)}
+                  className="text-[11px] text-indigo-600 hover:text-indigo-800 font-semibold cursor-pointer"
+                >
+                  {isCustomTitle ? 'Choose Standard' : '+ Type Custom Title'}
+                </button>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Certification Title
                 </label>
-                <select
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-indigo-600 focus:bg-white"
-                >
-                  <option value="5-Axis CNC Mill Certified Operator">5-Axis CNC Mill Certified Operator</option>
-                  <option value="Class 3B/4 Laser Safety Operator">Class 3B/4 Laser Safety Operator</option>
-                  <option value="MakerSpace Basic Safety Orientation">MakerSpace Basic Safety Orientation</option>
-                  <option value="Nanoscale Imaging Safety">Nanoscale Imaging Safety</option>
-                  <option value="Cleanroom Class 1000 Orientation">Cleanroom Class 1000 Orientation</option>
-                  <option value="3D Additive Sintering Operator">3D Additive Sintering Operator</option>
-                  <option value="BioSafety Level 2 Biohazard Containment">BioSafety Level 2 Biohazard Containment</option>
-                </select>
+                {isCustomTitle ? (
+                  <input
+                    type="text"
+                    required
+                    value={customTitle}
+                    onChange={(e) => setCustomTitle(e.target.value)}
+                    placeholder="e.g., Radiation Safety Level 3 / Heavy Crane Operator"
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-indigo-600 focus:bg-white"
+                  />
+                ) : (
+                  <select
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-indigo-600 focus:bg-white"
+                  >
+                    <option value="5-Axis CNC Mill Certified Operator">5-Axis CNC Mill Certified Operator</option>
+                    <option value="Class 3B/4 Laser Safety Operator">Class 3B/4 Laser Safety Operator</option>
+                    <option value="MakerSpace Basic Safety Orientation">MakerSpace Basic Safety Orientation</option>
+                    <option value="Nanoscale Imaging Safety">Nanoscale Imaging Safety</option>
+                    <option value="Cleanroom Class 1000 Orientation">Cleanroom Class 1000 Orientation</option>
+                    <option value="3D Additive Sintering Operator">3D Additive Sintering Operator</option>
+                    <option value="BioSafety Level 2 Biohazard Containment">BioSafety Level 2 Biohazard Containment</option>
+                    <option value="Hazardous Chemical Handling">Hazardous Chemical Handling</option>
+                  </select>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-700 mb-1">
-                    Issuing Authority
+                    Issuing Body / Department
                   </label>
                   <input
                     type="text"
                     required
                     value={issuingBody}
                     onChange={(e) => setIssuingBody(e.target.value)}
+                    placeholder="e.g., MIT EHS / Stanford Safety"
                     className="w-full px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-indigo-600 focus:bg-white"
                   />
                 </div>
@@ -218,7 +248,7 @@ export default function CertModal({ onClose }) {
                   className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-2 shadow-xs cursor-pointer"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>{loading ? 'Scanning Document...' : 'Run AI Verification & Save'}</span>
+                  <span>{loading ? 'Registering...' : 'Save & Verify Certification'}</span>
                 </button>
               </div>
 

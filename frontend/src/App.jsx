@@ -12,6 +12,7 @@ import ReturnModal from './components/ReturnModal';
 import IncidentModal from './components/IncidentModal';
 import ListResourceModal from './components/ListResourceModal';
 import CertModal from './components/CertModal';
+import ProfileModal from './components/ProfileModal';
 
 import { getActiveUser } from './services/api';
 
@@ -19,15 +20,15 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('catalog');
   const [currentUser, setCurrentUser] = useState(getActiveUser());
 
-  // Modal states
   const [selectedResourceForBooking, setSelectedResourceForBooking] = useState(null);
   const [selectedBookingForCheckin, setSelectedBookingForCheckin] = useState(null);
   const [selectedBookingForReturn, setSelectedBookingForReturn] = useState(null);
   const [selectedIncidentForResolve, setSelectedIncidentForResolve] = useState(null);
   const [showListResourceModal, setShowListResourceModal] = useState(false);
   const [showCertModal, setShowCertModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [profileModalMode, setProfileModalMode] = useState('create');
 
-  // Smooth refresh counter without tearing down DOM
   const [refreshCount, setRefreshCount] = useState(0);
 
   useEffect(() => {
@@ -45,16 +46,21 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
-      
-      {/* Top Professional Navigation Bar */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenCreateResource={() => setShowListResourceModal(true)}
         onOpenCertModal={() => setShowCertModal(true)}
+        onOpenCreateProfile={() => {
+          setProfileModalMode('create');
+          setShowProfileModal(true);
+        }}
+        onOpenEditProfile={() => {
+          setProfileModalMode('edit');
+          setShowProfileModal(true);
+        }}
       />
 
-      {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {activeTab === 'catalog' && (
           <CatalogPage
@@ -89,9 +95,6 @@ export default function App() {
         )}
       </main>
 
-      {/* Global Modals for Complete 10-Step Journey */}
-
-      {/* Steps 2, 3, 4: Eligibility, Purpose & Booking */}
       {selectedResourceForBooking && (
         <BookingModal
           resource={selectedResourceForBooking}
@@ -104,7 +107,6 @@ export default function App() {
         />
       )}
 
-      {/* Step 7: Check-In & Initial Condition */}
       {selectedBookingForCheckin && (
         <CheckInModal
           booking={selectedBookingForCheckin}
@@ -116,7 +118,6 @@ export default function App() {
         />
       )}
 
-      {/* Step 8: Return Handover & AI Condition Diff */}
       {selectedBookingForReturn && (
         <ReturnModal
           booking={selectedBookingForReturn}
@@ -128,7 +129,6 @@ export default function App() {
         />
       )}
 
-      {/* Step 9: Resolve Incident */}
       {selectedIncidentForResolve && (
         <IncidentModal
           incident={selectedIncidentForResolve}
@@ -140,7 +140,6 @@ export default function App() {
         />
       )}
 
-      {/* Step 1: List Resource */}
       {showListResourceModal && (
         <ListResourceModal
           onClose={() => setShowListResourceModal(false)}
@@ -151,14 +150,19 @@ export default function App() {
         />
       )}
 
-      {/* User Safety Certifications Passport */}
       {showCertModal && (
         <CertModal
           onClose={() => setShowCertModal(false)}
         />
       )}
 
-      {/* Professional Light Footer */}
+      <ProfileModal
+        isOpen={showProfileModal}
+        mode={profileModalMode}
+        onClose={() => setShowProfileModal(false)}
+        onSuccess={() => triggerRefresh()}
+      />
+
       <footer className="border-t border-slate-200 bg-white py-6 mt-12 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
