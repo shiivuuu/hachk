@@ -1,4 +1,4 @@
-# 📡 Nexora REST API Specification
+# 📡 NexusEquip REST API Specification
 
 Base URL (Local): `http://localhost:5000/api`  
 Base URL (Production): `https://<render-service-url>/api`
@@ -13,7 +13,7 @@ Returns system status, active database engine, and record counts.
 ```json
 {
   "status": "healthy",
-  "system": "Nexora Platform API",
+  "system": "NexusEquip Platform API",
   "version": "1.0.0",
   "database": "connected (SQLite WAL)",
   "records": { "users": 5, "resources": 8, "bookings": 5 }

@@ -5,7 +5,7 @@ const {
   analyzeAllocationFairness
 } = require('../index');
 
-console.log('=== RUNNING NEXORA AI SUITE VERIFICATION ===\n');
+console.log('=== RUNNING NEXUSEQUIP AI SUITE VERIFICATION ===\n');
 
 // 1. Test Matcher
 const sampleResources = [

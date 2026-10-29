@@ -1,4 +1,4 @@
-# 🎨 Nexora Design System & UX Specification
+# 🎨 NexusEquip Design System & UX Specification
 
 ## 1. Design Philosophy
 Sharing institutional hardware—such as 4-axis CNC mills, confocal fluorescence microscopes, and Class 5 cleanrooms—requires a level of psychological trust and rigorous accountability far beyond ordinary meeting room reservations.
@@ -23,7 +23,7 @@ Our visual language, **"High-Precision Laboratory & Trust Framework"**, communic
 ---
 
 ## 3. The 10-Step Lifecycle Component Paradigm
-Every action in Nexora maps to an auditable step:
+Every action in NexusEquip maps to an auditable step:
 1. **Listing Created:** Owner sets specs, hourly rate, deposit, and required training badges.
 2. **Eligibility Checked:** Automated verification of operator certifications.
 3. **Request Submitted:** Purpose-weighted access request.

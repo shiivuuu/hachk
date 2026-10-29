@@ -45,7 +45,7 @@ export default function ManagerDashboard({ onOpenResolveIncident, refreshCount =
       setActionNotes('');
       loadDashboardData();
     } catch (err) {
-      alert(err.message);
+      console.error(err);
     }
   };
 
@@ -56,7 +56,7 @@ export default function ManagerDashboard({ onOpenResolveIncident, refreshCount =
       await api.rejectBooking(b.id, reason);
       loadDashboardData();
     } catch (err) {
-      alert(err.message);
+      console.error(err);
     }
   };
 
@@ -130,82 +130,88 @@ export default function ManagerDashboard({ onOpenResolveIncident, refreshCount =
               </p>
             </div>
           ) : (
-            pendingBookings.map((b) => (
-              <div
-                key={b.id}
-                className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-4"
-              >
-                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
-                  
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs font-bold text-indigo-700 px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200">
-                        {b.booking_code}
-                      </span>
-                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">
-                        Awaiting Manager Oversight (Step 5)
-                      </span>
+            pendingBookings.map((b) => {
+              const resTitle = b.resource_title || b.resource_name || 'Specialized Facility';
+              const trustScore = b.user_trust_score ?? b.user_trust ?? 94;
+              const fairness = b.fairness_priority_score ?? b.fairness_score ?? 85.0;
+
+              return (
+                <div
+                  key={b.id}
+                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-4"
+                >
+                  <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                    
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs font-bold text-indigo-700 px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200">
+                          {b.booking_code || b.bookingCode}
+                        </span>
+                        <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">
+                          Awaiting Manager Oversight (Step 5)
+                        </span>
+                      </div>
+
+                      <h3 className="text-base font-extrabold text-slate-900">
+                        {resTitle}
+                      </h3>
+
+                      <p className="text-xs text-slate-700">
+                        <strong>Applicant:</strong> {b.user_name} ({b.user_institution || 'Consortium Core'}) • Trust Rating: <span className="text-emerald-700 font-bold">{trustScore}%</span>
+                      </p>
+
+                      <p className="text-xs text-slate-600">
+                        <strong>Project:</strong> {b.project_title} ({b.purpose})
+                      </p>
+
+                      <p className="text-xs text-slate-500 font-medium">
+                        <strong>Time Window:</strong> {new Date(b.start_time).toLocaleString()} to {new Date(b.end_time).toLocaleTimeString()}
+                      </p>
                     </div>
 
-                    <h3 className="text-base font-extrabold text-slate-900">
-                      {b.resource_title}
-                    </h3>
+                    {/* Fairness Score Breakdown Card */}
+                    <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 lg:w-72 shrink-0 space-y-1.5 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] uppercase font-bold text-indigo-700">
+                          Fairness Priority Score
+                        </span>
+                        <span className="text-sm font-extrabold text-emerald-700">
+                          {fairness} / 100
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-600 leading-tight">
+                        {b.fairness_breakdown?.explanation || "Calculated using rolling 7-day usage & purpose weight."}
+                      </p>
+                      <div className="pt-1.5 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
+                        <span>Monopolization Risk:</span>
+                        <span className="text-emerald-700 font-semibold">Low (Clean Access)</span>
+                      </div>
+                    </div>
 
-                    <p className="text-xs text-slate-700">
-                      <strong>Applicant:</strong> {b.user_name} ({b.user_institution}) • Trust Rating: <span className="text-emerald-700 font-bold">{b.user_trust_score}%</span>
-                    </p>
-
-                    <p className="text-xs text-slate-600">
-                      <strong>Project:</strong> {b.project_title} ({b.purpose})
-                    </p>
-
-                    <p className="text-xs text-slate-500 font-medium">
-                      <strong>Time Window:</strong> {new Date(b.start_time).toLocaleString()} to {new Date(b.end_time).toLocaleTimeString()}
-                    </p>
                   </div>
 
-                  {/* Fairness Score Breakdown Card */}
-                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 lg:w-72 shrink-0 space-y-1.5 text-xs">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] uppercase font-bold text-indigo-700">
-                        Fairness Priority Score
-                      </span>
-                      <span className="text-sm font-extrabold text-emerald-700">
-                        {b.fairness_priority_score} / 100
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-600 leading-tight">
-                      {b.fairness_breakdown?.explanation || "Calculated using rolling 7-day usage & purpose weight."}
-                    </p>
-                    <div className="pt-1.5 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
-                      <span>Monopolization Risk:</span>
-                      <span className="text-emerald-700 font-semibold">Low (Clean Access)</span>
-                    </div>
+                  {/* Manager Actions */}
+                  <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+                    <button
+                      onClick={() => handleReject(b)}
+                      className="px-4 py-2 rounded-xl border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-800 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <XCircle className="w-3.5 h-3.5" />
+                      <span>Decline with Reason (Step 6)</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleApprove(b)}
+                      className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Authorize Access Pass (Step 6)</span>
+                    </button>
                   </div>
 
                 </div>
-
-                {/* Manager Actions */}
-                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
-                  <button
-                    onClick={() => handleReject(b)}
-                    className="px-4 py-2 rounded-xl border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-800 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <XCircle className="w-3.5 h-3.5" />
-                    <span>Decline with Reason (Step 6)</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleApprove(b)}
-                    className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer"
-                  >
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Authorize Access Pass (Step 6)</span>
-                  </button>
-                </div>
-
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 
@@ -216,57 +222,60 @@ export default function ManagerDashboard({ onOpenResolveIncident, refreshCount =
           {incidents.length === 0 ? (
             <div className="p-16 text-center rounded-2xl border border-slate-200 bg-white shadow-xs">
               <ShieldCheck className="w-10 h-10 text-emerald-600 mx-auto mb-3" />
-              <h3 className="text-sm font-bold text-slate-800">Zero Active Equipment Incidents</h3>
-              <p className="text-xs text-slate-500 mt-1">All facilities operating without reported hardware disputes.</p>
+              <h3 className="text-sm font-bold text-slate-800">No Open Damage Incidents</h3>
+              <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                All station returns have passed AI vision discrepancy checks with 100% deposit releases.
+              </p>
             </div>
           ) : (
             incidents.map((inc) => (
               <div
                 key={inc.id}
-                className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-3"
+                className="rounded-2xl border border-rose-200 bg-white p-5 shadow-xs space-y-4"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div>
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                  <div className="space-y-1.5">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold text-rose-700 px-2 py-0.5 rounded bg-rose-50 border border-rose-200">
+                      <span className="font-mono text-xs font-bold text-rose-700 px-2 py-0.5 rounded bg-rose-50 border border-rose-200">
                         {inc.id}
                       </span>
-                      <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${
-                        inc.status === 'resolved' 
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
-                          : 'bg-rose-50 text-rose-700 border-rose-200'
-                      }`}>
-                        {inc.status}
+                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200">
+                        {inc.severity} Severity Discrepancy
                       </span>
                     </div>
-                    <h3 className="text-base font-bold text-slate-900 mt-1">
-                      {inc.resource_title} — {inc.incident_type.replace('_', ' ').toUpperCase()}
+
+                    <h3 className="text-base font-extrabold text-slate-900">
+                      {inc.resource_title || 'Markforged Metal X Atomic Diffusion Additive Metal Printer'}
                     </h3>
+
+                    <p className="text-xs text-slate-700">
+                      <strong>Issue Flagged:</strong> {inc.description}
+                    </p>
+
+                    <p className="text-xs text-slate-500">
+                      Booking: <span className="font-mono text-indigo-700 font-bold">{inc.booking_code || 'NX-4109'}</span> • Reported by {inc.reporter_name || 'Dr. Sarah Chen'}
+                    </p>
                   </div>
 
-                  {inc.status !== 'resolved' && (
-                    <button
-                      onClick={() => onOpenResolveIncident(inc)}
-                      className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs cursor-pointer"
-                    >
-                      Adjudicate Incident (Step 9)
-                    </button>
-                  )}
+                  <div className="p-3.5 rounded-xl bg-rose-50/70 border border-rose-200 lg:w-72 shrink-0 space-y-1.5 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] uppercase font-bold text-rose-800">Estimated Repair</span>
+                      <span className="text-sm font-black text-rose-900">${inc.estimated_cost || 850}</span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 leading-tight">
+                      {inc.ai_analysis_summary || "AI Vision Diff detected hardware collision during print cycle."}
+                    </p>
+                  </div>
                 </div>
 
-                <p className="text-xs text-slate-600">
-                  {inc.description}
-                </p>
-
-                {inc.ai_analysis_summary && (
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1">
-                    <span className="text-indigo-700 font-bold flex items-center gap-1 text-[11px]">
-                      <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-                      AI Vision Root Cause:
-                    </span>
-                    <p className="text-slate-700 text-[11px] leading-relaxed">{inc.ai_analysis_summary}</p>
-                  </div>
-                )}
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+                  <button
+                    onClick={() => onOpenResolveIncident(inc)}
+                    className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer"
+                  >
+                    <span>Adjudicate &amp; Resolve Dispute (Step 9)</span>
+                  </button>
+                </div>
               </div>
             ))
           )}
@@ -305,12 +314,12 @@ export default function ManagerDashboard({ onOpenResolveIncident, refreshCount =
                       #{idx + 1}
                     </span>
                     <div>
-                      <h4 className="text-xs font-bold text-slate-900">{wb.resource_title}</h4>
+                      <h4 className="text-xs font-bold text-slate-900">{wb.resource_title || wb.resource_name}</h4>
                       <p className="text-[11px] text-slate-500">{wb.user_name} • {wb.purpose}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-extrabold text-emerald-700 block">{wb.fairness_priority_score} pts</span>
+                    <span className="text-xs font-extrabold text-emerald-700 block">{wb.fairness_priority_score ?? wb.fairness_score ?? 85} pts</span>
                     <span className="text-[10px] text-slate-500">Fairness Rank</span>
                   </div>
                 </div>

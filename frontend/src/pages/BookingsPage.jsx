@@ -95,6 +95,8 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
         <div className="space-y-4">
           {bookings.map((b) => {
             const conf = statusConfig[b.status] || { label: b.status, color: 'bg-slate-100 text-slate-700' };
+            const title = b.resource_title || b.resource_name || 'Specialized Facility';
+            const fairness = b.fairness_priority_score ?? b.fairness_score ?? 85.0;
 
             return (
               <div
@@ -107,7 +109,7 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
                   <div className="space-y-1.5">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="font-mono text-xs font-bold text-indigo-700 px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200">
-                        {b.booking_code}
+                        {b.booking_code || b.bookingCode}
                       </span>
                       <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${conf.color}`}>
                         {conf.label}
@@ -120,7 +122,7 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
                     </div>
 
                     <h3 className="text-base font-extrabold text-slate-900">
-                      {b.resource_title}
+                      {title}
                     </h3>
 
                     <p className="text-xs text-slate-700 font-medium">
@@ -135,7 +137,7 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
                       <span>•</span>
                       <span className="flex items-center gap-1">
                         <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                        <span>{b.resource_location || 'Campus Shared Core'}</span>
+                        <span>{b.resource_location || b.location || 'Campus Shared Core'}</span>
                       </span>
                       <span>•</span>
                       <span className="text-slate-700">
@@ -204,7 +206,7 @@ export default function BookingsPage({ onOpenCheckIn, onOpenReturn, onOpenIncide
                         </span>
                         <div className="flex items-center justify-between">
                           <span className="text-slate-500">Priority Score:</span>
-                          <span className="font-bold text-emerald-700">{b.fairness_priority_score} / 100</span>
+                          <span className="font-bold text-emerald-700">{fairness} / 100</span>
                         </div>
                         <p className="text-[11px] text-slate-600 leading-tight">
                           {b.fairness_breakdown?.explanation || "Purpose priority and institutional trust verified."}

@@ -1,5 +1,5 @@
 /**
- * Nexora AI Document & Certification Verifier
+ * NexusEquip AI Document & Certification Verifier
  * Simulates intelligent OCR parsing, safety badge extraction, 
  * expiration auditing, and human-in-the-loop review recommendations.
  */

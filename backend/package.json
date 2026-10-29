@@ -1,14 +1,14 @@
 {
-  "name": "nexora-backend",
+  "name": "nexusequip-backend",
   "version": "1.0.0",
-  "description": "Nexora Backend: Institutional Resource & Equipment Sharing Platform",
+  "description": "NexusEquip Backend: Institutional Resource & Equipment Sharing Platform",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "node src/server.js",
     "seed": "node src/db/seed.js",
     "postinstall": "node src/db/seed.js",
-    "test": "node ../ai/tests/ai_test.js"
+    "test": "node ../ai/tests/ai_test.js && node tests/run_all_tests.js"
   },
   "keywords": [
     "equipment-sharing",
@@ -17,7 +17,7 @@
     "hackathon",
     "audit-trail"
   ],
-  "author": "Nexora Team",
+  "author": "NexusEquip Team",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",

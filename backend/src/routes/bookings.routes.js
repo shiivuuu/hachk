@@ -6,6 +6,17 @@ const { calculateFairnessScore, detectConflicts, prioritizeWaitlist } = require(
 const { recordAudit } = require('../services/auditService');
 const { analyzeConditionDiff } = require('../../../ai/condition_analyzer');
 
+const RESOURCE_ALIASES = {
+  'res_haas_cnc': 'res_cnc_haas',
+  'res_cleanroom_litho': 'res_cleanroom_bay',
+  'res_highspeed_optics': 'res_phantom_camera',
+  'res_drone_arena': 'res_robotics_arena',
+  'res_cnc_haas': 'res_haas_cnc',
+  'res_cleanroom_bay': 'res_cleanroom_litho',
+  'res_phantom_camera': 'res_highspeed_optics',
+  'res_robotics_arena': 'res_drone_arena'
+};
+
 router.get('/', (req, res) => {
   try {
     const { userId, resourceId, status } = req.query;
@@ -31,8 +42,9 @@ router.get('/', (req, res) => {
       params.push(userId);
     }
     if (resourceId) {
-      query += ` AND b.resource_id = ?`;
-      params.push(resourceId);
+      const altId = RESOURCE_ALIASES[resourceId] || resourceId;
+      query += ` AND (b.resource_id = ? OR b.resource_id = ?)`;
+      params.push(resourceId, altId);
     }
     if (status && status !== 'all') {
       query += ` AND b.status = ?`;
@@ -43,10 +55,18 @@ router.get('/', (req, res) => {
 
     const bookings = db.prepare(query).all(...params);
 
-    const formatted = bookings.map(b => ({
-      ...b,
-      fairness_breakdown: JSON.parse(b.fairness_breakdown || '{}')
-    }));
+    const formatted = bookings.map(b => {
+      const pass = b.booking_code ? `NX-PASS-${b.booking_code.replace(/\D/g, '')}` : 'NX-PASS-1000';
+      return {
+        ...b,
+        resource_name: b.resource_title,
+        user_trust: b.user_trust_score,
+        fairness_score: b.fairness_priority_score,
+        deposit_amount: b.resource_deposit || 150,
+        pass_code: pass,
+        fairness_breakdown: JSON.parse(b.fairness_breakdown || '{}')
+      };
+    });
 
     res.json({ success: true, count: formatted.length, bookings: formatted });
   } catch (err) {
@@ -77,11 +97,17 @@ router.get('/:id', (req, res) => {
     const returnRecord = db.prepare('SELECT * FROM returns WHERE booking_id = ?').get(booking.id);
     const incident = db.prepare('SELECT * FROM incidents WHERE booking_id = ?').get(booking.id);
     const auditLogs = db.prepare('SELECT * FROM audit_logs WHERE entity_id = ? ORDER BY timestamp DESC').all(booking.id);
+    const pass = booking.booking_code ? `NX-PASS-${booking.booking_code.replace(/\D/g, '')}` : 'NX-PASS-1000';
 
     res.json({
       success: true,
       booking: {
         ...booking,
+        resource_name: booking.resource_title,
+        user_trust: booking.user_trust_score,
+        fairness_score: booking.fairness_priority_score,
+        deposit_amount: booking.resource_deposit || 150,
+        pass_code: pass,
         resource_specs: JSON.parse(booking.resource_specs || '{}'),
         required_certifications: JSON.parse(booking.required_certifications || '[]'),
         fairness_breakdown: JSON.parse(booking.fairness_breakdown || '{}'),
@@ -123,7 +149,12 @@ router.post('/', (req, res) => {
     const user = db.prepare('SELECT * FROM users WHERE id = ?').get(actorId);
     if (!user) return res.status(404).json({ success: false, error: 'User not found' });
 
-    const resource = db.prepare('SELECT * FROM resources WHERE id = ?').get(resource_id);
+    let targetResourceId = resource_id;
+    let resource = db.prepare('SELECT * FROM resources WHERE id = ?').get(targetResourceId);
+    if (!resource && RESOURCE_ALIASES[targetResourceId]) {
+      targetResourceId = RESOURCE_ALIASES[targetResourceId];
+      resource = db.prepare('SELECT * FROM resources WHERE id = ?').get(targetResourceId);
+    }
     if (!resource) return res.status(404).json({ success: false, error: 'Resource not found' });
 
     const requiredCerts = JSON.parse(resource.required_certifications || '[]');
@@ -144,11 +175,11 @@ router.post('/', (req, res) => {
 
     const fairness = calculateFairnessScore({
       userId: actorId,
-      resourceId: resource_id,
+      resourceId: targetResourceId,
       purpose: purpose || 'Academic Thesis / Core Research'
     });
 
-    const conflicts = detectConflicts(resource_id, start_time, end_time);
+    const conflicts = detectConflicts(targetResourceId, start_time, end_time);
     const isConflicted = conflicts.length > 0;
 
     const bookingId = `bk_${uuidv4().slice(0, 8)}`;
@@ -158,7 +189,7 @@ router.post('/', (req, res) => {
     let waitlistPosition = null;
 
     if (isConflicted) {
-      const waitlistCount = db.prepare("SELECT COUNT(*) as c FROM bookings WHERE resource_id = ? AND status = 'waitlisted'").get(resource_id);
+      const waitlistCount = db.prepare("SELECT COUNT(*) as c FROM bookings WHERE resource_id = ? AND status = 'waitlisted'").get(targetResourceId);
       waitlistPosition = (waitlistCount ? waitlistCount.c : 0) + 1;
     }
 
@@ -173,7 +204,7 @@ router.post('/', (req, res) => {
     insertStmt.run(
       bookingId,
       bookingCode,
-      resource_id,
+      targetResourceId,
       actorId,
       start_time,
       end_time,
@@ -216,6 +247,8 @@ router.post('/', (req, res) => {
       '/lab-management'
     );
 
+    const passCode = `NX-PASS-${bookingCode.replace(/\D/g, '')}`;
+
     res.status(201).json({
       success: true,
       message: isConflicted 
@@ -224,11 +257,17 @@ router.post('/', (req, res) => {
       booking: {
         id: bookingId,
         bookingCode,
+        booking_code: bookingCode,
+        resource_id: targetResourceId,
+        resource_name: resource.title,
+        resource_title: resource.title,
         status,
         waitlistPosition,
         fairnessScore: fairness.score,
+        fairness_score: fairness.score,
         fairnessExplanation: fairness.explanation,
-        fairnessBreakdown: fairness.breakdown
+        fairnessBreakdown: fairness.breakdown,
+        pass_code: passCode
       }
     });
   } catch (err) {
@@ -273,7 +312,16 @@ router.post('/:id/approve', (req, res) => {
       '/bookings'
     );
 
-    res.json({ success: true, message: 'Booking approved successfully', bookingId: booking.id, status: 'approved' });
+    const passCode = `NX-PASS-${booking.booking_code.replace(/\D/g, '') || '8000'}`;
+
+    res.json({ 
+      success: true, 
+      message: 'Booking approved successfully', 
+      bookingId: booking.id, 
+      status: 'approved',
+      passCode,
+      pass_code: passCode
+    });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -385,6 +433,7 @@ router.post('/:id/checkin', (req, res) => {
       checkin: {
         id: checkinId,
         passCode,
+        pass_code: passCode,
         status: 'checked_in',
         initialCondition: initial_condition_status
       }
@@ -480,7 +529,7 @@ router.post('/:id/return', (req, res) => {
         entityId: incidentId,
         action: 'STEP9_DAMAGE_INCIDENT_FLAGGED',
         actorId: 'ai_engine',
-        actorName: 'Nexora AI Safety Guard',
+        actorName: 'NexusEquip AI Safety Guard',
         actorRole: 'automated_system',
         details: {
           bookingCode: booking.booking_code,

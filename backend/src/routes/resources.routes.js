@@ -4,6 +4,18 @@ const db = require('../db/database');
 const { v4: uuidv4 } = require('uuid');
 const { recordAudit } = require('../services/auditService');
 
+// Map between frontend resource IDs and database seeded resource IDs
+const RESOURCE_ALIASES = {
+  'res_haas_cnc': 'res_cnc_haas',
+  'res_cleanroom_litho': 'res_cleanroom_bay',
+  'res_highspeed_optics': 'res_phantom_camera',
+  'res_drone_arena': 'res_robotics_arena',
+  'res_cnc_haas': 'res_haas_cnc',
+  'res_cleanroom_bay': 'res_cleanroom_litho',
+  'res_phantom_camera': 'res_highspeed_optics',
+  'res_robotics_arena': 'res_drone_arena'
+};
+
 /**
  * GET /api/resources
  * Search & filter resources
@@ -41,14 +53,23 @@ router.get('/', (req, res) => {
 
     const resources = db.prepare(query).all(...params);
 
-    // Parse JSON columns
-    const formatted = resources.map(r => ({
-      ...r,
-      images: JSON.parse(r.images || '[]'),
-      specs: JSON.parse(r.specs || '{}'),
-      required_certifications: JSON.parse(r.required_certifications || '[]'),
-      tags: JSON.parse(r.tags || '[]')
-    }));
+    // Parse JSON columns and provide dual-compatibility for frontend fields
+    const formatted = resources.map(r => {
+      const images = JSON.parse(r.images || '[]');
+      const firstImage = images.length > 0 ? images[0] : 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800';
+      return {
+        ...r,
+        name: r.title, // frontend name property
+        title: r.title,
+        deposit_amount: r.deposit, // frontend deposit_amount property
+        deposit: r.deposit,
+        image_url: firstImage, // frontend image_url property
+        images,
+        specs: JSON.parse(r.specs || '{}'),
+        required_certifications: JSON.parse(r.required_certifications || '[]'),
+        tags: JSON.parse(r.tags || '[]')
+      };
+    });
 
     res.json({ success: true, count: formatted.length, resources: formatted });
   } catch (err) {
@@ -61,25 +82,30 @@ router.get('/', (req, res) => {
  */
 router.get('/:id', (req, res) => {
   try {
+    const rawId = req.params.id;
+    const aliasedId = RESOURCE_ALIASES[rawId] || rawId;
+
     const resource = db.prepare(`
       SELECT r.*, u.name as owner_name, u.email as owner_email, u.avatar as owner_avatar
       FROM resources r
       JOIN users u ON r.owner_id = u.id
-      WHERE r.id = ?
-    `).get(req.params.id);
+      WHERE r.id = ? OR r.id = ?
+    `).get(rawId, aliasedId);
 
     if (!resource) {
       return res.status(404).json({ success: false, error: 'Resource not found' });
     }
+
+    const matchedId = resource.id;
 
     // Get upcoming confirmed bookings for this resource
     const upcomingBookings = db.prepare(`
       SELECT b.id, b.start_time, b.end_time, b.status, b.purpose, u.name as user_name
       FROM bookings b
       JOIN users u ON b.user_id = u.id
-      WHERE b.resource_id = ? AND b.status IN ('approved', 'checked_in')
+      WHERE (b.resource_id = ? OR b.resource_id = ?) AND b.status IN ('approved', 'checked_in')
       ORDER BY b.start_time ASC
-    `).all(req.params.id);
+    `).all(rawId, matchedId);
 
     // Get latest check-in / return condition history
     const conditionHistory = db.prepare(`
@@ -89,16 +115,22 @@ router.get('/:id', (req, res) => {
       FROM bookings b
       LEFT JOIN checkins c ON b.id = c.booking_id
       LEFT JOIN returns r ON b.id = r.booking_id
-      WHERE b.resource_id = ? AND (c.id IS NOT NULL OR r.id IS NOT NULL)
+      WHERE (b.resource_id = ? OR b.resource_id = ?) AND (c.id IS NOT NULL OR r.id IS NOT NULL)
       ORDER BY b.start_time DESC
       LIMIT 5
-    `).all(req.params.id);
+    `).all(rawId, matchedId);
+
+    const images = JSON.parse(resource.images || '[]');
+    const firstImage = images.length > 0 ? images[0] : 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800';
 
     res.json({
       success: true,
       resource: {
         ...resource,
-        images: JSON.parse(resource.images || '[]'),
+        name: resource.title,
+        deposit_amount: resource.deposit,
+        image_url: firstImage,
+        images,
         specs: JSON.parse(resource.specs || '{}'),
         required_certifications: JSON.parse(resource.required_certifications || '[]'),
         tags: JSON.parse(resource.tags || '[]'),
@@ -117,10 +149,11 @@ router.get('/:id', (req, res) => {
  */
 router.get('/:id/eligibility', (req, res) => {
   try {
-    const resourceId = req.params.id;
+    const rawId = req.params.id;
+    const aliasedId = RESOURCE_ALIASES[rawId] || rawId;
     const userId = req.query.userId || req.headers['x-user-id'] || 'usr_researcher';
 
-    const resource = db.prepare('SELECT * FROM resources WHERE id = ?').get(resourceId);
+    const resource = db.prepare('SELECT * FROM resources WHERE id = ? OR id = ?').get(rawId, aliasedId);
     if (!resource) return res.status(404).json({ success: false, error: 'Resource not found' });
 
     const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
@@ -179,28 +212,26 @@ router.get('/:id/eligibility', (req, res) => {
  */
 router.post('/', (req, res) => {
   try {
-    const {
-      title,
-      description,
-      category,
-      type,
-      owner_id,
-      institution,
-      location,
-      images,
-      specs,
-      hourly_rate = 0,
-      deposit = 0,
-      min_hours = 1,
-      max_hours = 8,
-      requires_supervision = 0,
-      supervision_notes = '',
-      required_certifications = [],
-      tags = []
-    } = req.body;
+    const title = req.body.title || req.body.name;
+    const description = req.body.description;
+    const category = req.body.category || 'fabrication';
+    const type = req.body.type || req.body.category || 'Specialized Hardware';
+    const owner_id = req.body.owner_id;
+    const institution = req.body.institution;
+    const location = req.body.location;
+    const images = req.body.images;
+    const specs = req.body.specs;
+    const hourly_rate = req.body.hourly_rate ?? 0;
+    const deposit = req.body.deposit ?? req.body.deposit_amount ?? 0;
+    const min_hours = req.body.min_hours ?? 1;
+    const max_hours = req.body.max_hours ?? 8;
+    const requires_supervision = req.body.requires_supervision ?? 0;
+    const supervision_notes = req.body.supervision_notes ?? '';
+    const required_certifications = req.body.required_certifications ?? [];
+    const tags = req.body.tags ?? [];
 
-    if (!title || !category || !type) {
-      return res.status(400).json({ success: false, error: 'Title, category, and equipment type are required' });
+    if (!title) {
+      return res.status(400).json({ success: false, error: 'Title/name is required' });
     }
 
     const id = `res_${uuidv4().slice(0, 8)}`;

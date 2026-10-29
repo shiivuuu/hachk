@@ -45,7 +45,7 @@ export default function AuditPage({ refreshCount = 0 }) {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(logs, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `nexora-audit-ledger-${Date.now()}.json`);
+    downloadAnchor.setAttribute("download", `nexusequip-audit-ledger-${Date.now()}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();

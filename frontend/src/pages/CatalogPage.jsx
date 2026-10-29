@@ -69,11 +69,15 @@ export default function CatalogPage({ onSelectResource, onOpenListModal, refresh
     : resources.filter(r => {
         if (!searchQuery) return true;
         const q = searchQuery.toLowerCase();
+        const title = (r.title || r.name || '').toLowerCase();
+        const desc = (r.description || '').toLowerCase();
+        const inst = (r.institution || '').toLowerCase();
+        const type = (r.type || r.category || '').toLowerCase();
         return (
-          r.title.toLowerCase().includes(q) ||
-          r.description.toLowerCase().includes(q) ||
-          r.institution.toLowerCase().includes(q) ||
-          r.type.toLowerCase().includes(q)
+          title.includes(q) ||
+          desc.includes(q) ||
+          inst.includes(q) ||
+          type.includes(q)
         );
       });
 
@@ -230,7 +234,7 @@ export default function CatalogPage({ onSelectResource, onOpenListModal, refresh
                 {aiInfo && (
                   <div className="mb-2 p-2 rounded-xl bg-indigo-50 border border-indigo-200 text-[11px] text-indigo-900 flex items-center justify-between font-medium">
                     <span className="font-bold flex items-center gap-1">
-                      <Sparkles className="w-3 h-3 text-indigo-600" />
+                      <Sparkles className="w-3 dot h-3 text-indigo-600" />
                       {aiInfo.matchScore}% Synergy Match
                     </span>
                     <span className="text-[10px] text-slate-600">

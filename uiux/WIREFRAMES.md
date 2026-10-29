@@ -1,13 +1,13 @@
-# 📐 Nexora Wireframes & UI Component Architecture
+# 📐 NexusEquip Wireframes & UI Component Architecture
 
-This document documents the layout specifications for the Nexora application.
+This document documents the layout specifications for the NexusEquip application.
 
 ---
 
 ## 1. Top Navigation & Persona Switcher Bar
 ```
 +-----------------------------------------------------------------------------------------------------------------+
-| [CPU Icon] Nexora [Trust OS]       [Catalog]  [My Lifecycle (10)]  [Lab Control]  [AI Studio]  [Audit Trail]   |
+| [CPU Icon] NexusEquip [Trust OS]       [Catalog]  [My Lifecycle (10)]  [Lab Control]  [AI Studio]  [Audit Trail]   |
 | Multi-Tenant Safety Fabric         ------------------------------------------------------------------------   |
 |                                                     [+ List Resource]   [Avatar] Alex Rivera (94% Trust) [v]   |
 +-----------------------------------------------------------------------------------------------------------------+

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: nexora-backend
+    name: nexusequip-backend
     env: node
     plan: free
     region: oregon

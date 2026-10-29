@@ -33,7 +33,7 @@ class NumberedCanvas(canvas.Canvas):
         
         # Header (pages > 1)
         if self._pageNumber > 1:
-            self.drawString(54, 750, "Nexora: Institutional Resource & Equipment Sharing Platform")
+            self.drawString(54, 750, "NexusEquip: Institutional Resource & Equipment Sharing Platform")
             self.drawRightString(letter[0] - 54, 750, "Hackathon Technical Report & Architecture")
             self.setStrokeColor(colors.HexColor("#cbd5e1"))
             self.setLineWidth(0.5)
@@ -146,7 +146,7 @@ def build_pdf(filename):
     elements = []
 
     # Title & Metadata
-    elements.append(Paragraph("Nexora: Institutional Resource Platform", title_style))
+    elements.append(Paragraph("NexusEquip: Institutional Resource Platform", title_style))
     elements.append(Paragraph("Complete Technical Architecture, Problem Analysis, 10-Step Workflow, AI Engine &amp; API Report", subtitle_style))
 
     # Meta Table
@@ -176,7 +176,7 @@ def build_pdf(filename):
     ))
     elements.append(Paragraph(
         "Ordinary calendar booking software treats specialized technical property as generic meeting rooms: <b>they fail to enforce operator "
-        "safety credentials, baseline condition tracking, dispute liability, and fair quota allocation</b>. Nexora solves this by providing a unified "
+        "safety credentials, baseline condition tracking, dispute liability, and fair quota allocation</b>. NexusEquip solves this by providing a unified "
         "trust, safety, and fair allocation OS governing physical equipment sharing.",
         body_style
     ))
@@ -184,12 +184,12 @@ def build_pdf(filename):
     # SECTION 2: THE 10-STEP LIFECYCLE
     elements.append(Paragraph("2. Complete 10-Step Operational Lifecycle (100% Implemented)", h1_style))
     elements.append(Paragraph(
-        "Nexora implements every stage of the 10-step hackathon resource-sharing lifecycle without manual simulation:",
+        "NexusEquip implements every stage of the 10-step hackathon resource-sharing lifecycle without manual simulation:",
         body_style
     ))
 
     steps_data = [
-        [Paragraph("Stage", table_header_style), Paragraph("Lifecycle Step", table_header_style), Paragraph("Nexora Implementation &amp; Safeguards", table_header_style)],
+        [Paragraph("Stage", table_header_style), Paragraph("Lifecycle Step", table_header_style), Paragraph("NexusEquip Implementation &amp; Safeguards", table_header_style)],
         [Paragraph("<b>Step 01</b>", table_cell_style), Paragraph("<b>Owner Lists Resource</b>", table_cell_style), Paragraph("Owner configures specifications, hourly rates, security deposits, mandatory certifications, and supervision flags.", table_cell_style)],
         [Paragraph("<b>Step 02</b>", table_cell_style), Paragraph("<b>Discovery &amp; Eligibility</b>", table_cell_style), Paragraph("Natural Language AI matcher ranks synergy; system verifies safety certifications and blocks uncertified operators with clear alerts.", table_cell_style)],
         [Paragraph("<b>Step 03</b>", table_cell_style), Paragraph("<b>Request Submitted</b>", table_cell_style), Paragraph("Applicant submits purpose-weighted request (Thesis / Capstone / Coursework) with supervisor endorsement.", table_cell_style)],
@@ -218,7 +218,7 @@ def build_pdf(filename):
     # SECTION 3: IN-APP JUDGE EVALUATION HUB & RUBRIC
     elements.append(Paragraph("3. Interactive Judge Evaluation Hub &amp; 100-Pt Rubric Scorecard", h1_style))
     elements.append(Paragraph(
-        "Nexora incorporates an in-app <b>Judge Demo Hub</b> with 1-click autonomous execution, instant persona switching, and guided test scenarios:",
+        "NexusEquip incorporates an in-app <b>Judge Demo Hub</b> with 1-click autonomous execution, instant persona switching, and guided test scenarios:",
         body_style
     ))
 
@@ -293,10 +293,15 @@ def build_pdf(filename):
 
 if __name__ == '__main__':
     out_dir = os.path.dirname(os.path.abspath(__file__))
-    target_docs_pdf = os.path.join(out_dir, "Nexora_Hackathon_Comprehensive_Report.pdf")
+    target_docs_pdf = os.path.join(out_dir, "NexusEquip_Hackathon_Comprehensive_Report.pdf")
     build_pdf(target_docs_pdf)
     
     # Also write to root directory
-    target_root_pdf = os.path.join(out_dir, "..", "Nexora_Hackathon_Comprehensive_Report.pdf")
+    target_root_pdf = os.path.join(out_dir, "..", "NexusEquip_Hackathon_Comprehensive_Report.pdf")
     shutil.copyfile(target_docs_pdf, target_root_pdf)
     print(f"PDF copied to root at: {target_root_pdf}")
+    
+    # Also copy to frontend public
+    target_frontend_pdf = os.path.join(out_dir, "..", "frontend", "public", "report.pdf")
+    shutil.copyfile(target_docs_pdf, target_frontend_pdf)
+    print(f"PDF copied to frontend public at: {target_frontend_pdf}")

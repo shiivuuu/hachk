@@ -70,7 +70,7 @@ export default function Navbar({
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-lg tracking-tight text-slate-900">
-                  Nexora
+                  NexusEquip
                 </span>
                 <span className="px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
                   Trust OS
@@ -145,16 +145,28 @@ export default function Navbar({
             </button>
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-2.5">
             {/* Judge Evaluation Hub Button */}
             <button
               onClick={onOpenJudgeHub}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-black rounded-xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 hover:from-amber-300 hover:to-amber-200 text-slate-950 shadow-sm border border-amber-400 cursor-pointer transition-all hover:scale-102"
-              title="Open 10-Step Interactive Evaluation Hub"
+              title="Open 10-Step Interactive Evaluation Hub &amp; Judge Credentials"
             >
               <Award className="w-3.5 h-3.5 fill-current text-slate-950" />
               <span>🏆 Judge Hub</span>
             </button>
+
+            {/* Direct PDF Report Quick Link */}
+            <a
+              href="/report.pdf"
+              target="_blank"
+              rel="noreferrer"
+              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 transition-all shadow-xs"
+              title="View / Download Hackathon Comprehensive Report PDF"
+            >
+              <FileCheck2 className="w-3.5 h-3.5 text-indigo-600" />
+              <span>📄 Report PDF</span>
+            </a>
 
             <button
               onClick={onOpenCreateResource}

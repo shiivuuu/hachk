@@ -1,13 +1,19 @@
 {
-  "name": "nexora-ai",
+  "name": "nexusequip-ai",
   "version": "1.0.0",
-  "description": "Nexora AI Suite: Natural Language Resource Matcher, Document Certification OCR Verifier, Pre/Post Condition Vision Analyzer, and Fair Allocation Optimizer",
+  "description": "NexusEquip AI Suite: Natural Language Resource Matcher, Document Certification OCR Verifier, Pre/Post Condition Vision Analyzer, and Fair Allocation Optimizer",
   "main": "index.js",
   "scripts": {
     "test": "node tests/ai_test.js",
     "start": "node index.js"
   },
-  "keywords": ["ai", "matching", "fairness", "verification", "computer-vision"],
-  "author": "Nexora Core Team",
+  "keywords": [
+    "ai",
+    "matching",
+    "fairness",
+    "verification",
+    "computer-vision"
+  ],
+  "author": "NexusEquip Core Team",
   "license": "MIT"
 }

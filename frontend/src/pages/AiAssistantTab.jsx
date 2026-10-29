@@ -62,7 +62,7 @@ export default function AiAssistantTab({ refreshCount = 0 }) {
           <span>Autonomous Trust &amp; Fairness AI Architecture</span>
         </div>
         <h1 className="text-2xl font-extrabold text-slate-900">
-          Nexora AI Safety &amp; Governance Studio
+          NexusEquip AI Safety &amp; Governance Studio
         </h1>
         <p className="text-xs text-slate-500 mt-1 max-w-3xl">
           Inspect our 4 dedicated AI systems: Pre/Post Vision Condition Analyzer, Anti-Monopolization Fairness Curve, 

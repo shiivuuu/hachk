@@ -1,5 +1,5 @@
-# 🎤 Nexora: Hackathon Judge Presentation Script & Pitch Deck Guide
-**Project Name:** Nexora — Institutional Resource & Equipment Sharing Platform  
+# 🎤 NexusEquip: Hackathon Judge Presentation Script & Pitch Deck Guide
+**Project Name:** NexusEquip — Institutional Resource & Equipment Sharing Platform  
 **Challenge:** Unlock Underused Equipment and Spaces  
 **Target Pitch Window:** 3-Minute Lightning Pitch or 5-Minute Standard Hackathon Evaluation  
 **Repository:** [https://github.com/shiivuuu/hachk](https://github.com/shiivuuu/hachk)
@@ -34,14 +34,14 @@
 > 
 > *Ordinary booking systems track time; they do **not** track trust, safety, wear-and-tear, or fair allocation.*
 > 
-> *This is why we built **Nexora**: the Trust, Safety, and Fair-Allocation OS for institutional equipment sharing."*
+> *This is why we built **NexusEquip**: the Trust, Safety, and Fair-Allocation OS for institutional equipment sharing."*
 
 ---
 
 ### 3. Live Product Walkthrough (0:50 - 02:10)
 *(Presenter switches screen to the live web app and narrates while clicking)*
 
-> *"Let me show you how an asset moves through its complete 10-step lifecycle on Nexora:*
+> *"Let me show you how an asset moves through its complete 10-step lifecycle on NexusEquip:*
 > 
 > 1. **Step 1 & 2: Listing & Pre-Flight Gating:**  
 >    *Here on the catalog, Dr. Sarah Chen listed a **Haas VF-2 4-Axis CNC Mill** with strict prerequisites. Watch what happens if I'm logged in as **Maya Lin**, an undergraduate student without advanced training: when I click 'Request Access', the system immediately halts the booking with a red safety banner—alerting me that I lack the mandatory **5-Axis CNC Mill Certified Operator** badge.*
@@ -64,16 +64,16 @@
 ---
 
 ### 4. The Technical & Algorithmic Moat (02:10 - 02:40)
-> *"Under the hood, Nexora is not a mock-up. It is a production-grade monorepo:
+> *"Under the hood, NexusEquip is not a mock-up. It is a production-grade monorepo:
 > - **React 19 with Tailwind v4** on the frontend.
 > - **Node.js 24 with SQLite Write-Ahead-Logging (WAL)** on the backend for high-concurrency ACID transactions.
-> - **Autonomous offline resilience:** Even if the network drops, Nexora's local state engine seamlessly simulates every lifecycle event without crashing.
+> - **Autonomous offline resilience:** Even if the network drops, NexusEquip's local state engine seamlessly simulates every lifecycle event without crashing.
 > - **Mathematical Gini Fair Allocation:** We monitor department utilization inequality and apply progressive penalties to resource hoarding while granting +1.5 pts/hr starvation relief to waitlisted students."*
 
 ---
 
 ### 5. Closing & Real-World Potential (02:40 - 03:00)
-> *"Nexora unlocks billions of dollars in dormant technical capital, accelerates scientific research, and protects institutional property with verifiable accountability.
+> *"NexusEquip unlocks billions of dollars in dormant technical capital, accelerates scientific research, and protects institutional property with verifiable accountability.
 > 
 > We have built the complete 10-step lifecycle from listing to return, 100% verified by automated test suites.
 > 
@@ -89,7 +89,7 @@ If you have 5 minutes, expand the following sections:
 |---|---|
 | **01:10 - 01:50** | **Deep Dive on AI Suite:** Open the **"AI & Fairness"** tab. Show the live **Condition Vision Diff Sandbox**, demonstrate how it catches tool fractures vs normal pei bed scuffs, and review the **Gini Anti-Monopoly Utilization Chart**. |
 | **02:40 - 03:20** | **Step 9 Dispute Resolution:** Switch to Lab Manager -> Lab Control -> Incidents. Open incident `INC-2026-001` on the Markforged metal printer. Demonstrate how the manager reviews AI repair estimates ($850), enters adjudication notes, and chooses *Partial Repair Deduction* before signing off. |
-| **04:10 - 04:40** | **Institutional Business Model & Scalability:** Explain how university consortia (like the Big Ten Academic Alliance or Ivy Plus) can use Nexora to federate equipment sharing across 15+ campuses without purchasing duplicate $500k tools. |
+| **04:10 - 04:40** | **Institutional Business Model & Scalability:** Explain how university consortia (like the Big Ten Academic Alliance or Ivy Plus) can use NexusEquip to federate equipment sharing across 15+ campuses without purchasing duplicate $500k tools. |
 
 ---
 
@@ -100,7 +100,7 @@ If you have 5 minutes, expand the following sections:
 > *"Ordinary booking tools only answer **'When is the room free?'** They completely ignore the operational realities of expensive machinery:
 > 1. **Safety:** They can't verify if the operator has completed biohazard or 5-axis CNC training.
 > 2. **Accountability:** They have no concept of before-and-after condition baselines. If a $20,000 spindle breaks, you don't know who did it.
-> 3. **Fairness:** They operate on first-come-first-served, allowing rich labs to hoard all slots. Nexora solves all three with automated gating, condition baselines, and anti-monopoly scoring."*
+> 3. **Fairness:** They operate on first-come-first-served, allowing rich labs to hoard all slots. NexusEquip solves all three with automated gating, condition baselines, and anti-monopoly scoring."*
 
 ### Q2: "What prevents a user from lying about pre-existing damage during Step 7 Check-in?"
 > **Answer:**  
@@ -110,7 +110,7 @@ If you have 5 minutes, expand the following sections:
 
 ### Q3: "What if an AI hallucination unfairly charges a student for damage?"
 > **Answer:**  
-> *"Nexora adheres to strict **Human-in-the-Loop Governance**. Rule #12 of the hackathon explicitly forbids automated safety or penalty decisions without human review. In Nexora, the AI Vision Diff only **flags** a discrepancy and drafts an initial estimate. The security deposit is held in escrow, and the authorized Lab Safety Officer (Dr. Sarah Chen) must manually review the evidence and adjudicate the final sign-off."*
+> *"NexusEquip adheres to strict **Human-in-the-Loop Governance**. Rule #12 of the hackathon explicitly forbids automated safety or penalty decisions without human review. In NexusEquip, the AI Vision Diff only **flags** a discrepancy and drafts an initial estimate. The security deposit is held in escrow, and the authorized Lab Safety Officer (Dr. Sarah Chen) must manually review the evidence and adjudicate the final sign-off."*
 
 ### Q4: "How does your Fair Allocation algorithm prevent wealthy labs from monopolizing equipment?"
 > **Answer:**  

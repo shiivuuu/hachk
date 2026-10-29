@@ -7,7 +7,11 @@ import {
 } from 'lucide-react';
 
 export default function ResourceCard({ resource, onSelect }) {
-  const requiredCerts = resource.required_certifications || [];
+  const title = resource.title || resource.name || 'Specialized Facility';
+  const rawCerts = resource.required_certifications;
+  const requiredCerts = Array.isArray(rawCerts) 
+    ? rawCerts 
+    : (typeof rawCerts === 'string' ? JSON.parse(rawCerts || '[]') : []);
   
   const categoryBadges = {
     fabrication: 'bg-indigo-50 text-indigo-700 border-indigo-200',
@@ -17,9 +21,11 @@ export default function ResourceCard({ resource, onSelect }) {
     computing: 'bg-amber-50 text-amber-700 border-amber-200'
   };
 
-  const imageSrc = resource.images && resource.images.length > 0
+  const imageSrc = (resource.images && resource.images.length > 0)
     ? resource.images[0]
-    : 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800';
+    : (resource.image_url || 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800');
+
+  const depositValue = resource.deposit ?? resource.deposit_amount ?? 150;
 
   return (
     <div className="group rounded-2xl border border-slate-200 bg-white hover:border-slate-300 transition-all duration-200 flex flex-col overflow-hidden shadow-xs hover:shadow-md">
@@ -28,7 +34,7 @@ export default function ResourceCard({ resource, onSelect }) {
       <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
         <img
           src={imageSrc}
-          alt={resource.title}
+          alt={title}
           className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
         />
 
@@ -38,7 +44,7 @@ export default function ResourceCard({ resource, onSelect }) {
             {resource.category}
           </span>
           <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-slate-700 border border-slate-200">
-            {resource.type}
+            {resource.type || resource.category}
           </span>
         </div>
 
@@ -68,7 +74,7 @@ export default function ResourceCard({ resource, onSelect }) {
       <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
         <div>
           <h3 className="font-bold text-base text-slate-900 group-hover:text-indigo-600 transition-colors line-clamp-1">
-            {resource.title}
+            {title}
           </h3>
           <p className="text-xs text-slate-600 mt-1 line-clamp-2 leading-relaxed">
             {resource.description}
@@ -77,7 +83,7 @@ export default function ResourceCard({ resource, onSelect }) {
           {/* Location detail */}
           <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-2 font-medium">
             <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-            <span className="truncate">{resource.location}</span>
+            <span className="truncate">{resource.location || resource.facility_name || 'Main Campus'}</span>
           </div>
 
           {/* Required Certifications */}
@@ -111,14 +117,14 @@ export default function ResourceCard({ resource, onSelect }) {
                 ${resource.hourly_rate}
               </span>
               <span className="text-[11px] text-slate-500 font-medium">/hr</span>
-              {resource.deposit > 0 && (
+              {depositValue > 0 && (
                 <span className="text-[10px] text-slate-500 ml-1.5 font-medium">
-                  (${resource.deposit} dep)
+                  (${depositValue} dep)
                 </span>
               )}
             </div>
             <p className="text-[10px] text-indigo-600 font-semibold">
-              Min {resource.min_hours}h - Max {resource.max_hours}h
+              Min {resource.min_hours || 1}h - Max {resource.max_hours || 8}h
             </p>
           </div>
 

@@ -1,4 +1,4 @@
-# 🏆 Nexora: Hackathon Project Submission Document
+# 🏆 NexusEquip: Hackathon Project Submission Document
 **Problem Statement:** Unlock Underused Equipment and Spaces  
 **One-Line Description:** A trusted, multi-tenant platform that helps universities, research labs, makerspaces, and communities safely share underused spaces, advanced equipment, and technical resources with automated safety verification, explainable fair allocation, and tamper-evident condition auditing.
 
@@ -11,7 +11,7 @@ While ordinary room booking software treats specialized technical property as ge
 - Unsubstantiated condition disputes (pre-existing wear vs. negligent damage).
 - Starvation of early-stage student researchers and community innovators.
 
-**Nexora** targets **Inter-Institutional Research Consortia, University Shared Facilities, Makerspaces, and Regional Innovation Labs**. It formalizes the complete 10-step lifecycle of physical asset sharing from listing to return, backed by an autonomous AI safety and fairness layer.
+**NexusEquip** targets **Inter-Institutional Research Consortia, University Shared Facilities, Makerspaces, and Regional Innovation Labs**. It formalizes the complete 10-step lifecycle of physical asset sharing from listing to return, backed by an autonomous AI safety and fairness layer.
 
 ---
 
@@ -37,7 +37,7 @@ While ordinary room booking software treats specialized technical property as ge
 
 ## 4. The Complete 10-Step Sharing Lifecycle
 
-Nexora implements and automates every stage of the 10-step resource-sharing journey:
+NexusEquip implements and automates every stage of the 10-step resource-sharing journey:
 
 1. **Step 1: Resource Listed with Governance Conditions:** Owner publishes asset specifications, access limits, required certifications, and staff supervision rules.
 2. **Step 2: Discovery & Pre-Flight Eligibility Check:** System validates the user's verified credentials, remaining hourly quota, and security deposit before booking.

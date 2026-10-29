@@ -5,8 +5,12 @@
   "framework": "vite",
   "rewrites": [
     {
+      "source": "/report.pdf",
+      "destination": "/report.pdf"
+    },
+    {
       "source": "/(.*)",
-      "destination": "/"
+      "destination": "/index.html"
     }
   ]
 }

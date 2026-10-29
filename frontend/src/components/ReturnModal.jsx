@@ -230,7 +230,7 @@ export default function ReturnModal({ booking, onClose, onSuccess }) {
             <div className="p-3 rounded-xl bg-teal-50 border border-teal-200 text-[11px] text-teal-900 flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
               <span>
-                <strong>Nexora AI Inspection Guard:</strong> System will automatically compare this submission against your Step 7 baseline to verify deposit refund eligibility.
+                <strong>NexusEquip AI Inspection Guard:</strong> System will automatically compare this submission against your Step 7 baseline to verify deposit refund eligibility.
               </span>
             </div>
 

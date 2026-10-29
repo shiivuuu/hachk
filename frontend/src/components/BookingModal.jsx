@@ -17,6 +17,8 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
   const [eligibility, setEligibility] = useState(null);
   const [checkingEligibility, setCheckingEligibility] = useState(true);
 
+  const resourceTitle = resource.title || resource.name || 'Specialized Facility';
+
   const [startDate, setStartDate] = useState(new Date(Date.now() + 86400000).toISOString().split('T')[0]);
   const [startTime, setStartTime] = useState('10:00');
   const [durationHours, setDurationHours] = useState(resource.min_hours || 2);
@@ -69,7 +71,7 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
         start_time: startDateTime,
         end_time: endDateTime,
         purpose,
-        project_title: projectTitle || `${currentUser.name} Research Session on ${resource.title}`,
+        project_title: projectTitle || `${currentUser.name} Research Session on ${resourceTitle}`,
         supervisor_name: supervisorName
       };
 
@@ -95,7 +97,7 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
               Steps 2, 3 &amp; 4: Eligibility &amp; Fair Access Request
             </span>
             <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-              Request {resource.title}
+              Request {resourceTitle}
             </h2>
           </div>
           <button
@@ -120,8 +122,8 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
               </p>
             </div>
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 inline-block text-left text-xs space-y-1">
-              <p className="text-slate-600">Booking Code: <span className="font-mono text-indigo-700 font-bold">{submitSuccess.booking.bookingCode}</span></p>
-              <p className="text-slate-600">Fairness Priority Score: <span className="text-emerald-700 font-bold">{submitSuccess.booking.fairnessScore} / 100</span></p>
+              <p className="text-slate-600">Booking Code: <span className="font-mono text-indigo-700 font-bold">{submitSuccess.booking.booking_code || submitSuccess.booking.bookingCode}</span></p>
+              <p className="text-slate-600">Fairness Priority Score: <span className="text-emerald-700 font-bold">{submitSuccess.booking.fairness_score || submitSuccess.booking.fairnessScore} / 100</span></p>
               <p className="text-slate-600">Status: <span className="text-indigo-700 uppercase font-semibold">{submitSuccess.booking.status}</span></p>
             </div>
           </div>
@@ -262,7 +264,7 @@ export default function BookingModal({ resource, onClose, onSuccess }) {
             <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-[11px] text-indigo-900 flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
               <span>
-                <strong>Nexora Fair Allocation Engine Active:</strong> Rolling 7-day usage limits prevent monopolization. 
+                <strong>NexusEquip Fair Allocation Engine Active:</strong> Rolling 7-day usage limits prevent monopolization. 
                 Thesis and coursework projects receive transparent allocation priority.
               </span>
             </div>

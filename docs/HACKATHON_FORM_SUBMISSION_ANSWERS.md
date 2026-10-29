@@ -1,8 +1,8 @@
-# 📝 Nexora: Hackathon Form Submission Ready Answers
+# 📝 NexusEquip: Hackathon Form Submission Ready Answers
 **Submission Form Link:** [https://forms.gle/QTD1ZRuPX37Yef37A](https://forms.gle/QTD1ZRuPX37Yef37A)  
 **Hackathon Challenge:** Unlock Underused Equipment and Spaces  
 **Repository:** [https://github.com/shiivuuu/hachk](https://github.com/shiivuuu/hachk)  
-**Project Name:** Nexora (Institutional Resource & Equipment Sharing Platform)
+**Project Name:** NexusEquip (Institutional Resource & Equipment Sharing Platform)
 
 ---
 
@@ -12,12 +12,12 @@ If the Google Form has short fields, use these exact concise entries:
 
 | Form Field | Exact Value to Paste |
 |---|---|
-| **Project Title / Name** | `Nexora` |
+| **Project Title / Name** | `NexusEquip` |
 | **Track / Problem Statement** | `Unlock Underused Equipment and Spaces` |
 | **One-Line Description** | `A trusted multi-tenant platform that helps universities, research labs, makerspaces, and communities safely share underused specialized equipment and spaces with automated safety credential verification, explainable fair allocation, and tamper-evident condition auditing.` |
 | **Project Repository Link** | `https://github.com/shiivuuu/hachk` |
 | **Live Product / Demo Link** | `https://github.com/shiivuuu/hachk` *(or your Vercel deployment URL)* |
-| **Comprehensive Report PDF** | `https://github.com/shiivuuu/hachk/raw/main/Nexora_Hackathon_Comprehensive_Report.pdf` |
+| **Comprehensive Report PDF** | `https://github.com/shiivuuu/hachk/raw/main/NexusEquip_Hackathon_Comprehensive_Report.pdf` |
 | **Demo Credentials / Access** | `No sign-up or passwords required. 1-click persona switcher built-in: Dr. Sarah Chen (Lab Manager), Alex Rivera (Researcher), Maya Lin (Student), Marcus Vance (Maker), Dean Arthur Vance (Auditor). Click '🏆 Judge Demo Hub' in top navbar for guided 10-step evaluation.` |
 
 ---
@@ -32,13 +32,13 @@ Below are exhaustive, high-scoring answers organized to match each section of th
 
 #### Question: What specific use case or institution type does your solution serve?
 > **Copy & Paste Answer:**  
-> **Nexora** is purpose-built for **Inter-University Research Consortia, Higher-Education Shared Research Facilities, Makerspaces, and Regional Innovation Hubs**.
+> **NexusEquip** is purpose-built for **Inter-University Research Consortia, Higher-Education Shared Research Facilities, Makerspaces, and Regional Innovation Hubs**.
 > 
 > Academic institutions spend billions annually on high-value, specialized technical machinery—such as **Haas 4-axis CNC milling centers, FEI Field Emission Scanning Electron Microscopes (SEM), ISO Class 5 cleanroom photolithography bays, and ultra-high-speed photonics cameras (2M+ fps)**. These facilities sit idle between 60% and 75% of the time during off-peak hours and weekends.
 > 
 > At the same time, nearby PhD students, undergraduate capstone teams, and early-stage hardware entrepreneurs cannot advance their prototypes because purchasing this equipment ($100k to $1M+) or paying private commercial testing rates ($300 to $800/hour) is economically impossible.
 > 
-> Ordinary room-booking calendars fail because they treat high-consequence machinery like standard desks: they cannot enforce operator safety credentials, baseline physical equipment wear, resolve damage disputes fairly, or prevent dominant research labs from monopolizing available slots. Nexora solves this by providing a unified Trust, Safety, and Fair Allocation Operating System.
+> Ordinary room-booking calendars fail because they treat high-consequence machinery like standard desks: they cannot enforce operator safety credentials, baseline physical equipment wear, resolve damage disputes fairly, or prevent dominant research labs from monopolizing available slots. NexusEquip solves this by providing a unified Trust, Safety, and Fair Allocation Operating System.
 
 ---
 
@@ -46,7 +46,7 @@ Below are exhaustive, high-scoring answers organized to match each section of th
 
 #### Question: Who are the target users and resource owners on your platform?
 > **Copy & Paste Answer:**  
-> Nexora is architected around 5 core operational personas spanning institutional boundaries:
+> NexusEquip is architected around 5 core operational personas spanning institutional boundaries:
 > 
 > 1. **Resource Owners & Lab Safety Officers (e.g., Dr. Sarah Chen - MIT Center for Bits and Atoms):**  
 >    Responsible for protecting high-capital equipment from unauthorized or negligent operators, verifying mandatory laser/radiation/machining certifications, tracking baseline conditions, and reviewing damage disputes without being bogged down in administrative paperwork.
@@ -55,7 +55,7 @@ Below are exhaustive, high-scoring answers organized to match each section of th
 >    Requires certified access to advanced CNC machining and nanoscale characterization tools across consortia campuses for doctoral thesis work, expecting transparent scheduling and fast security deposit release.
 > 
 > 3. **Undergraduate & Capstone Students (e.g., Maya Lin - Carnegie Mellon):**  
->    Needs access to specialized tools for senior design projects without prohibitive rental barriers. Beneficiary of Nexora's transparent pre-flight training guidance and thesis-weighted priority allocation.
+>    Needs access to specialized tools for senior design projects without prohibitive rental barriers. Beneficiary of NexusEquip's transparent pre-flight training guidance and thesis-weighted priority allocation.
 > 
 > 4. **Community Hardware Innovators (e.g., Marcus Vance - Downtown MakerSpace):**  
 >    Hardware startup founders building clean-energy physical prototypes during off-peak lab hours, protected from unfair liability by pre-check-in baseline documentation.
@@ -80,7 +80,7 @@ Below are exhaustive, high-scoring answers organized to match each section of th
 
 #### Question: What is your proposed solution and how does it address these challenges?
 > **Copy & Paste Answer:**  
-> Nexora replaces fragmented booking spreadsheets with an **end-to-end institutional resource-sharing trust fabric** governing the complete physical asset lifecycle:
+> NexusEquip replaces fragmented booking spreadsheets with an **end-to-end institutional resource-sharing trust fabric** governing the complete physical asset lifecycle:
 > 
 > - **Pre-Flight Safety Qualification Gating:** Automatically validates user certifications (OSHA 30, Laser Safety L2, CNC 5-Axis) before allowing booking submissions.
 > - **Mathematical Anti-Monopolization Scoring:** Implements an explainable formula combining thesis purpose weighting (+40 pts), user trust rating, rolling 7-day usage penalties (-1.5x hours), and waitlist starvation relief (+1.5 pts/hr).
@@ -94,7 +94,7 @@ Below are exhaustive, high-scoring answers organized to match each section of th
 
 #### Question: Explain how an underused resource moves through its complete sharing lifecycle on your platform.
 > **Copy & Paste Answer:**  
-> Nexora operationalizes all 10 stages specified in the hackathon challenge objective:
+> NexusEquip operationalizes all 10 stages specified in the hackathon challenge objective:
 > 
 > 1. **Step 1: Resource Listed with Governance Conditions:** Owner defines technical specs, hourly rates, security deposits, mandatory certifications, and supervision flags.
 > 2. **Step 2: Discovery & Pre-Flight Eligibility Check:** User searches via Natural Language AI matcher; system cross-references user credentials against required safety badges. Missing certs block booking with clear guidance.
@@ -143,7 +143,7 @@ Below are exhaustive, high-scoring answers organized to match each section of th
 
 #### Question: Which AI tools, APIs, frameworks, or external models were used, and how was human oversight maintained?
 > **Copy & Paste Answer:**  
-> **Nexora enforces strict Human-in-the-Loop AI governance:** AI provides automated extraction, synergy rankings, and discrepancy alerts, while final access, liability, and deposit forfeiture decisions remain strictly reviewable and enforceable by authorized safety officers.
+> **NexusEquip enforces strict Human-in-the-Loop AI governance:** AI provides automated extraction, synergy rankings, and discrepancy alerts, while final access, liability, and deposit forfeiture decisions remain strictly reviewable and enforceable by authorized safety officers.
 > 
 > 1. **NLP Technical Semantic Matcher (`/ai/matcher.js`):** Maps colloquial research descriptions to machine parameters (e.g. "machining titanium" -> Haas VF-2 10,000 RPM spindle).
 > 2. **Safety Credential OCR Verifier (`/ai/cert_verifier.js`):** Simulates multi-modal OCR parsing on safety cards, validating issuing boards and expiration dates.

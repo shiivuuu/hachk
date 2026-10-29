@@ -1,5 +1,5 @@
 /**
- * Nexora AI Natural Language Resource Matcher
+ * NexusEquip AI Natural Language Resource Matcher
  * Parses user requirements, matches technical specifications, 
  * checks eligibility prerequisites, and ranks suitable resources.
  */

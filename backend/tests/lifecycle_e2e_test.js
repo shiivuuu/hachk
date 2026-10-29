@@ -1,5 +1,5 @@
 /**
- * Nexora End-to-End 10-Step Lifecycle Verification Test
+ * NexusEquip End-to-End 10-Step Lifecycle Verification Test
  * Executes all 10 hackathon stages via the live backend API and asserts success.
  */
 
